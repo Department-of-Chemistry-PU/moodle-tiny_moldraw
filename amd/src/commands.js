@@ -29,7 +29,7 @@ import {
     moldrawMenuItem,
     icon,
 } from './common';
-import {SketchEmbed} from './embed';
+import * as ketcherEmbed from './embed';
 
 /**
  * Handle the action for your plugin.
@@ -37,7 +37,7 @@ import {SketchEmbed} from './embed';
  */
 const handleAction = (editor) => {
     // TODO Handle the action.
-	const ketcherDraw = new SketchEmbed(editor);
+	const ketcherDraw = new ketcherEmbed(editor);
     ketcherDraw.displayDialogue();
     window.console.log(editor);
 };
