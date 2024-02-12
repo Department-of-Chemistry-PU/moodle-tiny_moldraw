@@ -26,7 +26,7 @@ const component = 'tiny_moldraw';
 export default {
     component,
     pluginName: `${component}/plugin`,
-    icon: component,
-    moldrawButton: `${component}_moldraw`,
-    moldrawMenuItem: `${component}_moldraw`,
+    icon: `${component}`,
+    moldrawButton: `${component}`,
+    moldrawMenuItem: `${component}`,
 };
