@@ -70,7 +70,7 @@ export const getSetup = async() => {
         // Register the moldraw Toolbar Button.
         editor.ui.registry.addButton(moldrawButton, {
             icon,
-            tooltip: moldrawButtonNameTitle,
+            tooltip: moldrawButtonTitle,
             onAction: () => handleAction(editor),
         });
 
@@ -78,7 +78,7 @@ export const getSetup = async() => {
         // This allows it to be added to a standard menu, or a context menu.
         editor.ui.registry.addMenuItem(moldrawMenuItem, {
             icon,
-            text: moldrawMenuItemNameTitle,
+            text: moldrawMenuItemTitle,
             onAction: () => handleAction(editor),
         });
     };
