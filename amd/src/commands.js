@@ -29,16 +29,27 @@ import {
     moldrawMenuItem,
     icon,
 } from './common';
-import * as ketcherEmbed from './embed';
+import ketcherEmbed from './embed';
 
 /**
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
 const handleAction = (editor) => {
-    // TODO Handle the action.
-	const ketcherDraw = new ketcherEmbed(editor);
+    const ketcherDraw = new KetcherEmbed(editor);
     ketcherDraw.displayDialogue();
+
+    // Listen for the save event from your KetcherEmbed instance
+    ketcherDraw.on('save', (structure) => {
+        // Create the div with the structure as its content
+        const div = document.createElement('div');
+        div.id = 'molFile';
+        div.innerHTML = structure;
+
+        // Insert the div into the TinyMCE editor's content
+        editor.insertContent(div.outerHTML);
+    });
+
     window.console.log(editor);
 };
 
