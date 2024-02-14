@@ -28,20 +28,27 @@ import * as ModalEvents from 'core/modal_events';
 import * as Ajax from 'core/ajax';
 import Templates from 'core/templates';
 
-function($, Modal, ModalEvents, Ajax, Templates) {
-	var trigger = $('#your_trigger_element_id'); // The element that triggers the modal to open.
-		Modal.create({
-		type: Modal.types.SAVE_CANCEL,
-		title: 'Ketcher Editor',
-		body: '<iframe src="../../ketcher/sketch.html" width="800" height="600"></iframe>', // Replace with the path to your Ketcher HTML file.
-		}, 
-		trigger)
-		.done(function(modal) {
-		// You can catch modal events here.
-			modal.getRoot().on(ModalEvents.save, function(e) {
-			// Prevent the default save behavior.
-			e.preventDefault();
-			// Here you can add your save logic.
-			});
-		});
-});
+export default class KetcherEmbed {
+    constructor(editor) {
+        this.editor = editor;
+    }
+
+    async displayDialogue() {
+        const trigger = $('#molfile'); // The element that triggers the modal to open.
+        const title = await getString('ketcher_editor', 'component'); // Replace 'component' with your component name
+
+        Modal.create({
+            type: Modal.types.SAVE_CANCEL,
+            title: title,
+            body: '<iframe src="../../ketcher/sketch.html" width="800" height="600"></iframe>', // Replace with the path to your Ketcher HTML file.
+        }, trigger)
+        .done(function(modal) {
+            // You can catch modal events here.
+            modal.getRoot().on(ModalEvents.save, function(e) {
+                // Prevent the default save behavior.
+                e.preventDefault();
+                // Here you can add your save logic.
+            });
+        });
+    }
+}
