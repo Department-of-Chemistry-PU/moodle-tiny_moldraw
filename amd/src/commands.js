@@ -17,7 +17,7 @@
  * Commands helper for the Moodle tiny_moldraw plugin.
  *
  * @module      plugintype_pluginname/commands
- * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -25,31 +25,17 @@ import {getButtonImage} from 'editor_tiny/utils';
 import {get_string as getString} from 'core/str';
 import {
     component,
-    moldrawButton,
-    moldrawMenuItem,
+    startsketchButtonName,
+    startsketchMenuItemName,
     icon,
 } from './common';
-import ketcherEmbed from './embed';
 
 /**
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
 const handleAction = (editor) => {
-    const ketcherDraw = new KetcherEmbed(editor);
-    ketcherDraw.displayDialogue();
-
-    // Listen for the save event from your KetcherEmbed instance
-    ketcherDraw.on('save', (structure) => {
-        // Create the div with the structure as its content
-        const div = document.createElement('div');
-        div.id = 'molFile';
-        div.innerHTML = structure;
-
-        // Insert the div into the TinyMCE editor's content
-        editor.insertContent(div.outerHTML);
-    });
-
+    // TODO Handle the action.
     window.console.log(editor);
 };
 
@@ -62,15 +48,13 @@ const handleAction = (editor) => {
  * @returns {function} The registration function to call within the Plugin.add function.
  */
 export const getSetup = async() => {
-	const isImage = (node) => node.nodeName.toLowerCase() === 'img';
-	
     const [
-        moldrawButtonTitle,
-        moldrawMenuItemTitle,
+        startsketchButtonNameTitle,
+        startsketchMenuItemNameTitle,
         buttonImage,
     ] = await Promise.all([
-        getString('button_moldraw', component),
-        getString('menuitem_moldraw', component),
+        getString('button_startsketch', component),
+        getString('menuitem_startsketch', component),
         getButtonImage('icon', component),
     ]);
 
@@ -78,18 +62,18 @@ export const getSetup = async() => {
         // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
         editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the moldraw Toolbar Button.
-        editor.ui.registry.addButton(moldrawButton, {
+        // Register the startsketch Toolbar Button.
+        editor.ui.registry.addButton(startsketchButtonName, {
             icon,
-            tooltip: moldrawButtonTitle,
+            tooltip: startsketchButtonNameTitle,
             onAction: () => handleAction(editor),
         });
 
-        // Add the moldraw Menu Item.
+        // Add the startsketch Menu Item.
         // This allows it to be added to a standard menu, or a context menu.
-        editor.ui.registry.addMenuItem(moldrawMenuItem, {
+        editor.ui.registry.addMenuItem(startsketchMenuItemName, {
             icon,
-            text: moldrawMenuItemTitle,
+            text: startsketchMenuItemNameTitle,
             onAction: () => handleAction(editor),
         });
     };
