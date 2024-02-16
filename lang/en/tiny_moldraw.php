@@ -29,4 +29,6 @@ $string['button_moldraw'] = 'Molecular Draw';
 $string['menuitem_moldraw'] = 'Start the moldraw';
 $string['pluginname'] = 'Start the moldraw';
 $string['pluginname'] = 'moldraw Plugin';
+$string['button_startsketch'] = 'Insert Chemical Structure';
+$string['menuitem_startsketch'] = 'Insert Chemical Structure';
 $string['privacy:metadata'] = 'moldraw Plugin does not store any personal data';
