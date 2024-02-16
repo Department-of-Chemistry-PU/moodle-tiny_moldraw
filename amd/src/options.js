@@ -16,8 +16,8 @@
 /**
  * Options helper for the Moodle tiny_moldraw plugin.
  *
- * @module      plugintype_pluginname/options
- * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
+ * @module      tiny_moldraw/options
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

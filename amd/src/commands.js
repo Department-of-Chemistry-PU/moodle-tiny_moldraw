@@ -16,7 +16,7 @@
 /**
  * Commands helper for the Moodle tiny_moldraw plugin.
  *
- * @module      plugintype_pluginname/commands
+ * @module      tiny_moldraw/commands
  * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

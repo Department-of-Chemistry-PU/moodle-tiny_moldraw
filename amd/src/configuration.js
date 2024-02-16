@@ -16,14 +16,14 @@
 /**
  * Tiny tiny_moldraw for Moodle.
  *
- * @module      plugintype_pluginname/plugin
- * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
+ * @module      tiny_moldraw/plugin
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import {
-    moldrawButtonName,
-    moldrawMenuItemName,
+    startsketchButtonName,
+    startsketchMenuItemName,
 } from './common';
 
 import {
@@ -34,7 +34,7 @@ import {
 const getToolbarConfiguration = (instanceConfig) => {
     let toolbar = instanceConfig.toolbar;
     toolbar = addToolbarButtons(toolbar, 'content', [
-        moldrawButtonName,
+        startsketchButtonName,
     ]);
 
     return toolbar;
@@ -43,7 +43,7 @@ const getToolbarConfiguration = (instanceConfig) => {
 const getMenuConfiguration = (instanceConfig) => {
     let menu = instanceConfig.menu;
     menu = addMenubarItem(menu, 'file', [
-        moldrawMenuItemName,
+        startsketchMenuItemName,
     ].join(' '));
 
     return menu;
