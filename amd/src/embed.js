@@ -29,6 +29,7 @@ import * as Ajax from 'core/ajax';
 import Templates from 'core/templates';
 import component from './common';
 
+
 export default class KetcherEmbed {
     constructor(editor) {
         this.editor = editor;
