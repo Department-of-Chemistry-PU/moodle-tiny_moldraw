@@ -24,7 +24,7 @@
 import {get_string as getString} from 'core/str';
 import * as ModalEvents from 'core/modal_events';
 import Templates from 'core/templates';
-import * as Modal from 'core/modal';
+import Modal from 'core/modal';
 import Config from 'core/config';
 import component from './common';
 
@@ -48,7 +48,6 @@ export const SketchEmbed = class {
 
     async displayDialogue() {
         Modal.create({
-            type: Modal.types.DEFAULT,
             title: getString('sketchtitle', 'component'),
             body: Templates.render('tiny_moldraw/sketch_iframe', {
                 src: this.getIframeURL()

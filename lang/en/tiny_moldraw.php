@@ -28,5 +28,5 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'Start the CHEM Editor';
 $string['button_startsketch'] = 'Insert CHEM Structure';
 $string['menuitem_startsketch'] = 'Insert CHEM Structure';
-$string['sketchtitle'] = 'Insert CHEM Structure';
+$string['sketchtitle'] = 'Chemical Structure Editor';
 $string['privacy:metadata'] = 'moldraw Plugin does not store any personal data';
