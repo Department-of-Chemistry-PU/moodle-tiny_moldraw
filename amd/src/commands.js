@@ -29,6 +29,7 @@ import {
     startsketchMenuItemName,
     icon,
 } from './common';
+import {SketchEmbed} from './embed';
 
 /**
  * Handle the action for your plugin.
@@ -36,6 +37,8 @@ import {
  */
 const handleAction = (editor) => {
     // TODO Handle the action.
+	const sketchImage = new SketchEmbed(editor);
+    sketchImage.displayDialogue();
     window.console.log(editor);
 };
 
@@ -48,6 +51,7 @@ const handleAction = (editor) => {
  * @returns {function} The registration function to call within the Plugin.add function.
  */
 export const getSetup = async() => {
+	const isImage = (node) => node.nodeName.toLowerCase() === 'img';
     const [
         startsketchButtonNameTitle,
         startsketchMenuItemNameTitle,
@@ -67,6 +71,14 @@ export const getSetup = async() => {
             icon,
             tooltip: startsketchButtonNameTitle,
             onAction: () => handleAction(editor),
+/**			
+				onSetup: api => {
+                return editor.selection.selectorChangedWithUnbind(
+                    'img:not([data-mce-object]):not([data-mce-placeholder]),figure.image',
+                    api.setActive
+                ).unbind;
+            }
+**/
         });
 
         // Add the startsketch Menu Item.
@@ -75,6 +87,13 @@ export const getSetup = async() => {
             icon,
             text: startsketchMenuItemNameTitle,
             onAction: () => handleAction(editor),
+        });
+
+        editor.ui.registry.addContextToolbar(startsketchButtonName, {
+            predicate: isImage,
+            items: startsketchButtonName,
+            position: 'node',
+            scope: 'node'		   						 
         });
     };
 };

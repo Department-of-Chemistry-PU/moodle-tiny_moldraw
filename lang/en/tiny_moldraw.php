@@ -25,10 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['button_moldraw'] = 'Molecular Draw';
-$string['menuitem_moldraw'] = 'Start the moldraw';
-$string['pluginname'] = 'Start the moldraw';
-$string['pluginname'] = 'moldraw Plugin';
-$string['button_startsketch'] = 'Insert Chemical Structure';
-$string['menuitem_startsketch'] = 'Insert Chemical Structure';
+$string['pluginname'] = 'Start the CHEM Editor';
+$string['button_startsketch'] = 'Insert CHEM Structure';
+$string['menuitem_startsketch'] = 'Insert CHEM Structure';
+$string['sketchtitle'] = 'Insert CHEM Structure';
 $string['privacy:metadata'] = 'moldraw Plugin does not store any personal data';
