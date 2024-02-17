@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Start the CHEM Editor';
+$string['pluginname'] = 'Chemical Structure Editor';
 $string['button_startsketch'] = 'Insert CHEM Structure';
 $string['menuitem_startsketch'] = 'Insert CHEM Structure';
 $string['sketchtitle'] = 'Chemical Structure Editor';
