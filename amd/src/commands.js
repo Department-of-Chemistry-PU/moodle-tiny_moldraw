@@ -38,7 +38,7 @@ import {SketchEmbed} from './embed';
 const handleAction = (editor) => {
     // TODO Handle the action.
 	const sketchImage = new SketchEmbed(editor);
-    
+    sketchImage.displayDialogue();
     window.console.log(editor);
     window.console.log("Hello Aniket, Its working")
 };
