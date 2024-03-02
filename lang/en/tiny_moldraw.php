@@ -30,3 +30,4 @@ $string['menuitem_startMolDraw'] = 'Start MOL Draw';
 $string['pluginname'] = 'Start MOL Draw';
 $string['pluginname'] = 'Chemical Structure Editor';
 $string['privacy:metadata'] = 'Chemical Structure Editor does not store any personal data';
+$string['sketchtitle'] = 'Chemical Structure Editor';

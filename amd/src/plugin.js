@@ -16,7 +16,7 @@
 /**
  * Tiny tiny_moldraw for Moodle.
  *
- * @module      plugintype_pluginname/plugin
+ * @module      tiny_moldraw/plugin
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

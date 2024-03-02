@@ -16,7 +16,7 @@
 /**
  * Commands helper for the Moodle tiny_moldraw plugin.
  *
- * @module      plugintype_pluginname/commands
+ * @module      tiny_moldraw/commands
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,6 +29,7 @@ import {
     startMolDrawMenuItemName,
     icon,
 } from './common';
+import {SketchEmbed} from './embed';
 
 /**
  * Handle the action for your plugin.
@@ -36,6 +37,8 @@ import {
  */
 const handleAction = (editor) => {
     // TODO Handle the action.
+	const molDraw = new SketchEmbed(editor);
+    molDraw.displayDialogue();
     window.console.log(editor);
 };
 

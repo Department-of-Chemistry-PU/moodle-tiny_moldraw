@@ -1,4 +1,4 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,22 +11,21 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Tiny Sketch plugin Embed class for Moodle.
+ * Commands helper for the Moodle tiny_moldraw plugin.
  *
  * @module      tiny_moldraw/embed
- * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.edu.in>
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import {get_string as getString} from 'core/str';
 import * as ModalEvents from 'core/modal_events';
 import Templates from 'core/templates';
-import Modal from 'core/modal';
+import * as Modal from 'core/modal';
 import Config from 'core/config';
-import component from './common';
 
 export const SketchEmbed = class {
     editor = null;
@@ -47,21 +46,19 @@ export const SketchEmbed = class {
     }
 
     async displayDialogue() {
-        Modal.create({
-            title: getString('sketchtitle', 'component'),
+        const modal = await Modal.create({
+            type: Modal.types.DEFAULT,
+            title: getString('sketchtitle', 'tiny_moldraw'),
             body: Templates.render('tiny_moldraw/sketch_iframe', {
                 src: this.getIframeURL()
-            })
-        }).then(modal => {
-            modal.getRoot().on(ModalEvents.hidden, () => {
-                modal.destroy();
-            });
-            modal.show();
-            document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:100%;height:100vh;margin:0;padding:0;";
-            document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
-            document.querySelector('.modal-body').style.cssText = "padding:0";
-            return modal;
-        }).catch();
+            }),
+            show: true,
+            removeOnClose: true,
+        });
+
+        document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:80%;height:80vh;margin:0;padding:0;";
+        document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
+        document.querySelector('.modal-body').style.cssText = "padding:0";
     }
 
     getIframeURL = () => {

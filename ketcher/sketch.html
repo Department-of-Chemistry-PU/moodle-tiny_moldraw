@@ -1,38 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Ketcher is a web-based chemical structure editor"
-    />
+    <meta name="description" content="Ketcher is a web-based chemical structure editor" />
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="./favicon-16x16.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="./apple-touch-icon.png"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.json" />
     <title>Ketcher v2.15.0</title>
     <script defer="defer" src="./static/js/main.963f80c2.js"></script>
-    <link href="./static/css/main.3fc9c0f8.css" rel="stylesheet" />
+    <link href="./static/css/main.3fc9c0f8.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 75%;
+        height: 75%;
+        background-color: #f0f0f0;
+        /* Optional background color */
+      }
+    </style>
   </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+  <body><noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="center">
+      <div id="root"></div>
+      <p><button onclick="exportMOLfile();">Export Molecule in Molfile</button></p>
+      <p><button onclick="exportRXNfile();">Export Molecule in RXNfile</button></p>
+      <p><button onclick="imageByFetcher();">Generate Image from Ketcher Format</button></p>
+    </div>
+    <p>Output:</p><img id=output />
+    <script>
+      var ketcher = null;
+      ///export to mol format
+      function exportMOLfile() {
+        window.ketcher.getMolfile("v2000").then(mol => {
+          alert(mol);
+          console.log(mol);
+        }).catch(error => {
+          console.error(error);
+          alert(error);
+        });
+      }
+      ///export to RXN format
+      function exportRXNfile() {
+        window.ketcher.getRxn("v2000").then(mol => {
+          alert(mol);
+          console.log(mol);
+        }).catch(error => {
+          console.error(error);
+          alert(error);
+        });
+      }
+      var display = document.getElementById("output");
+      const format = "png"; // or "svg"
+      function outputImage(promise) {
+        promise.then(value => ketcher.generateImage(value, {
+          outputFormat: format,
+          backgroundColor: "255, 255, 255"
+        })).then(value => display.src = URL.createObjectURL(value)).catch(error => window.alert(error));
+      }
+
+      function imageBySMILES() {
+        outputImage(window.ketcher.getSmiles());
+      }
+
+      function imageByFetcher() {
+        outputImage(window.ketcher.getKet());
+      }
+    </script>
   </body>
 </html>

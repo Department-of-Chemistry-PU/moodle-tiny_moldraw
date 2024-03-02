@@ -16,7 +16,7 @@
 /**
  * Common values helper for the Moodle tiny_moldraw plugin.
  *
- * @module      plugintype_pluginname/common
+ * @module      tiny_moldraw/common
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
