@@ -14,18 +14,6 @@
     <script defer="defer" src="./static/js/main.963f80c2.js"></script>
     <link href="./static/css/main.3fc9c0f8.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-      .center {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 75%;
-        height: 75%;
-        background-color: #f0f0f0;
-        /* Optional background color */
-      }
-    </style>
   </head>
   <body><noscript>You need to enable JavaScript to run this app.</noscript>
     <div class="center">
@@ -34,45 +22,42 @@
       <p><button onclick="exportRXNfile();">Export Molecule in RXNfile</button></p>
       <p><button onclick="imageByFetcher();">Generate Image from Ketcher Format</button></p>
     </div>
-    <p>Output:</p><img id=output />
     <script>
-      var ketcher = null;
-      ///export to mol format
-      function exportMOLfile() {
-        window.ketcher.getMolfile("v2000").then(mol => {
-          alert(mol);
-          console.log(mol);
-        }).catch(error => {
-          console.error(error);
-          alert(error);
-        });
-      }
-      ///export to RXN format
-      function exportRXNfile() {
-        window.ketcher.getRxn("v2000").then(mol => {
-          alert(mol);
-          console.log(mol);
-        }).catch(error => {
-          console.error(error);
-          alert(error);
-        });
-      }
-      var display = document.getElementById("output");
-      const format = "png"; // or "svg"
-      function outputImage(promise) {
-        promise.then(value => ketcher.generateImage(value, {
-          outputFormat: format,
-          backgroundColor: "255, 255, 255"
-        })).then(value => display.src = URL.createObjectURL(value)).catch(error => window.alert(error));
-      }
+  var ketcher = null;
+  var display = document.getElementById("output");
+  const format = "png"; // or "svg"
 
-      function imageBySMILES() {
-        outputImage(window.ketcher.getSmiles());
-      }
+  function outputImage(promise) {
+    promise.then(value => ketcher.generateImage(value, {
+      outputFormat: format,
+      backgroundColor: "255, 255, 255"
+    })).then(value => display.src = URL.createObjectURL(value)).catch(error => window.alert(error));
+  }
 
-      function imageByFetcher() {
-        outputImage(window.ketcher.getKet());
-      }
-    </script>
+  ///export to mol format and image
+  function exportMOLfile() {
+    window.ketcher.getMolfile("v2000").then(mol => {
+      alert(mol);
+      console.log(mol);
+      outputImage(window.ketcher.getMolfile("v2000"));
+    }).catch(error => {
+      console.error(error);
+      alert(error);
+    });
+  }
+
+  ///export to RXN format and image
+  function exportRXNfile() {
+    window.ketcher.getRxn("v2000").then(rxn => {
+      alert(rxn);
+      console.log(rxn);
+      outputImage(window.ketcher.getRxn("v2000"));
+    }).catch(error => {
+      console.error(error);
+      alert(error);
+    });
+  }
+</script>
+
   </body>
 </html>

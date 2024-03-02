@@ -49,7 +49,7 @@ export const SketchEmbed = class {
         const modal = await Modal.create({
             type: Modal.types.DEFAULT,
             title: getString('sketchtitle', 'tiny_moldraw'),
-            body: Templates.render('tiny_moldraw/sketch_iframe', {
+            body: Templates.render('tiny_moldraw/moldraw_iframe', {
                 src: this.getIframeURL()
             }),
             show: true,

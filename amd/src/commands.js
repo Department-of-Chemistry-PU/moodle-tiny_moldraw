@@ -23,22 +23,34 @@
 
 import {getButtonImage} from 'editor_tiny/utils';
 import {get_string as getString} from 'core/str';
+import Templates from 'core/templates';
+import * as Modal from 'core/modal_factory';
+import Config from 'core/config';
 import {
     component,
     startMolDrawButtonName,
     startMolDrawMenuItemName,
     icon,
 } from './common';
-import {SketchEmbed} from './embed';
 
 /**
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
-const handleAction = (editor) => {
-    // TODO Handle the action.
-	const molDraw = new SketchEmbed(editor);
-    molDraw.displayDialogue();
+const handleAction = async (editor) => {
+    const modal = await Modal.create({
+        type: Modal.types.DEFAULT,
+        title: await getString('sketchtitle', 'tiny_moldraw'),
+        body: await Templates.render('tiny_moldraw/moldraw_iframe', {
+            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`
+        }),
+        show: true,
+        removeOnClose: true,
+    });
+
+    document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:75%;height:75vh;margin:0;padding:0;";
+    document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
+    document.querySelector('.modal-body').style.cssText = "padding:0";
     window.console.log(editor);
 };
 
