@@ -26,4 +26,4 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'tiny_moldraw';
 $plugin->release = '0.1.0';
-$plugin->version = 2024020900;
+$plugin->version = 2024030200;

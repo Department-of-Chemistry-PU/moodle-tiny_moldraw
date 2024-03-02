@@ -17,7 +17,7 @@
 namespace tiny_moldraw\privacy;
 
 /**
- * Privacy API implementation for the moldraw Plugin plugin.
+ * Privacy API implementation for the Chemical Structure Editor plugin.
  *
  * @package     tiny_moldraw
  * @category    privacy
