@@ -15,23 +15,36 @@
     <link href="./static/css/main.3fc9c0f8.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
-  <body><noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="center">
-      <div id="root"></div>
-      <p><button onclick="exportMOLfile();">Export Molecule in Molfile</button></p>
-      <p><button onclick="exportRXNfile();">Export Molecule in RXNfile</button></p>
-      <p><button onclick="imageByFetcher();">Generate Image from Ketcher Format</button></p>
-    </div>
-    <script>
+  <body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div class="center">
+    <div id="root"></div>
+    <p><button onclick="exportMOLfile();">Export Molecule in Molfile</button></p>
+    <p><button onclick="exportRXNfile();">Export Molecule in RXNfile</button></p>
+  </div>
+<script>
   var ketcher = null;
-  var display = document.getElementById("output");
-  const format = "png"; // or "svg"
 
-  function outputImage(promise) {
-    promise.then(value => ketcher.generateImage(value, {
-      outputFormat: format,
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  function outputImage() {
+    var output = document.getElementById("output");
+    ketcher.getKet().then(struct => ketcher.generateImage(struct, {
+      outputFormat: "svg",
       backgroundColor: "255, 255, 255"
-    })).then(value => display.src = URL.createObjectURL(value)).catch(error => window.alert(error));
+    })).then(blob => blobToBase64(blob)).then(base64 => {
+      var img = document.createElement('img');
+      img.src = base64;
+      output.innerHTML = '';
+      output.appendChild(img);
+    }).catch(error => window.alert(error));
   }
 
   ///export to mol format and image
@@ -39,7 +52,7 @@
     window.ketcher.getMolfile("v2000").then(mol => {
       alert(mol);
       console.log(mol);
-      outputImage(window.ketcher.getMolfile("v2000"));
+      outputImage();
     }).catch(error => {
       console.error(error);
       alert(error);
@@ -51,7 +64,7 @@
     window.ketcher.getRxn("v2000").then(rxn => {
       alert(rxn);
       console.log(rxn);
-      outputImage(window.ketcher.getRxn("v2000"));
+      outputImage();
     }).catch(error => {
       console.error(error);
       alert(error);
@@ -59,5 +72,6 @@
   }
 </script>
 
-  </body>
+</body>
+
 </html>
