@@ -16,8 +16,8 @@
 /**
  * Common values helper for the Moodle tiny_moldraw plugin.
  *
- * @module      tiny_moldraw/common
- * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
+ * @module      plugintype_pluginname/common
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,7 @@ const component = 'tiny_moldraw';
 export default {
     component,
     pluginName: `${component}/plugin`,
-    icon: `${component}`,
-    startsketchButtonName: `${component}_startsketch`,
-    startsketchMenuItemName: `${component}_startsketch`,
+    icon: component,
+    startMolDrawButtonName: `${component}_startMolDraw`,
+    startMolDrawMenuItemName: `${component}_startMolDraw`,
 };

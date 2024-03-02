@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Tiny moldraw Plugin plugin for Moodle.
+ * Tiny Chemical Structure Editor plugin for Moodle.
  *
  * @package     tiny_moldraw
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>

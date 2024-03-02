@@ -16,8 +16,8 @@
 /**
  * Commands helper for the Moodle tiny_moldraw plugin.
  *
- * @module      tiny_moldraw/commands
- * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.ac.in>
+ * @module      plugintype_pluginname/commands
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -25,11 +25,10 @@ import {getButtonImage} from 'editor_tiny/utils';
 import {get_string as getString} from 'core/str';
 import {
     component,
-    startsketchButtonName,
-    startsketchMenuItemName,
+    startMolDrawButtonName,
+    startMolDrawMenuItemName,
     icon,
 } from './common';
-import {SketchEmbed} from './embed';
 
 /**
  * Handle the action for your plugin.
@@ -37,10 +36,7 @@ import {SketchEmbed} from './embed';
  */
 const handleAction = (editor) => {
     // TODO Handle the action.
-	const sketchImage = new SketchEmbed(editor);
-    sketchImage.displayDialogue();
     window.console.log(editor);
-    window.console.log("Hello Aniket, Its working")
 };
 
 /**
@@ -52,14 +48,13 @@ const handleAction = (editor) => {
  * @returns {function} The registration function to call within the Plugin.add function.
  */
 export const getSetup = async() => {
-	const isImage = (node) => node.nodeName.toLowerCase() === 'img';
     const [
-        startsketchButtonNameTitle,
-        startsketchMenuItemNameTitle,
+        startMolDrawButtonNameTitle,
+        startMolDrawMenuItemNameTitle,
         buttonImage,
     ] = await Promise.all([
-        getString('button_startsketch', component),
-        getString('menuitem_startsketch', component),
+        getString('button_startMolDraw', component),
+        getString('menuitem_startMolDraw', component),
         getButtonImage('icon', component),
     ]);
 
@@ -67,34 +62,19 @@ export const getSetup = async() => {
         // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
         editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the startsketch Toolbar Button.
-        editor.ui.registry.addButton(startsketchButtonName, {
+        // Register the startMolDraw Toolbar Button.
+        editor.ui.registry.addButton(startMolDrawButtonName, {
             icon,
-            tooltip: startsketchButtonNameTitle,
+            tooltip: startMolDrawButtonNameTitle,
             onAction: () => handleAction(editor),
-/**			
-				onSetup: api => {
-                return editor.selection.selectorChangedWithUnbind(
-                    'img:not([data-mce-object]):not([data-mce-placeholder]),figure.image',
-                    api.setActive
-                ).unbind;
-            }
-**/
         });
 
-        // Add the startsketch Menu Item.
+        // Add the startMolDraw Menu Item.
         // This allows it to be added to a standard menu, or a context menu.
-        editor.ui.registry.addMenuItem(startsketchMenuItemName, {
+        editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
             icon,
-            text: startsketchMenuItemNameTitle,
+            text: startMolDrawMenuItemNameTitle,
             onAction: () => handleAction(editor),
-        });
-
-        editor.ui.registry.addContextToolbar(startsketchButtonName, {
-            predicate: isImage,
-            items: startsketchButtonName,
-            position: 'node',
-            scope: 'node'		   						 
         });
     };
 };
