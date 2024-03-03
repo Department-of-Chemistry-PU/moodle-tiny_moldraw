@@ -37,6 +37,7 @@ import {
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
+
 const handleAction = async (editor) => {
     const modal = await Modal.create({
         type: Modal.types.DEFAULT,
@@ -53,6 +54,7 @@ const handleAction = async (editor) => {
     document.querySelector('.modal-body').style.cssText = "padding:0";
     window.console.log(editor);
 };
+
 
 /**
  * Get the setup function for the buttons.
