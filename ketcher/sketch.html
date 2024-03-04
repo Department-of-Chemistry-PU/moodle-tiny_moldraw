@@ -4,7 +4,6 @@
     <script defer="defer" src="./static/js/main.963f80c2.js"></script>
     <link href="./static/css/main.3fc9c0f8.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--<script src="./sketch.js"></script>-->
   </head>
   <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -40,49 +39,22 @@
     })).then(blob => blobToBase64(blob)).then(base64 => {
       var img = document.createElement('img');
       img.src = base64;
-	console.log(img);
       output.innerHTML = '';
 	output.appendChild(img);
     }).catch(error => window.alert(error));
   }
 
-  ///export to mol format and image
-/**  function exportMOLfile() {
-    window.ketcher.getMolfile("v2000").then(mol => {
-//	console.log(mol);
-      outputImage();
-    }).catch(error => {
-      console.error(error);
-      alert(error);
-    });
-  }
-**/
-
+  ///export to parent tinymce textarea as image the ketcher xml format
 function exportMOLfile() {
 outputImage();
 var width = document.getElementById('width');
 var height = document.getElementById('height');
-console.log('WIDTH:', width.value);
     getData().then(({ dataURI, ketData }) => {
       console.log('dataURI:', dataURI);  // Print dataURI to the console
       console.log('ketData:', ketData);  // Print ketData to the console
-console.log(width);
-console.log(height);
-      window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<img src="'+dataURI+'">');
+      window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<img src="'+dataURI+'" width="'+width.value+'px" height="'+height.value+'px">');
       window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<!--[ketdata]'+ketData+'[/ketData]');
       $(window.parent.document).find(".modal").find('.close').click();
-    }).catch(error => {
-      console.error(error);
-      alert(error);
-    });
-  }
-
-  ///export to RXN format and image
-  function exportRXNfile() {
-    window.ketcher.getRxn("v2000").then(rxn => {
-      alert(rxn);
-      console.log(rxn);
-      outputImage();
     }).catch(error => {
       console.error(error);
       alert(error);
@@ -91,7 +63,6 @@ console.log(height);
     // Expose the dataURI and ketData to the parent window
   function getData() {
   return new Promise((resolve, reject) => {
-
     ketcher.getKet().then(struct => {
       ketcher.generateImage(struct, {
         outputFormat: "svg",
@@ -105,11 +76,8 @@ console.log(height);
     }).catch(reject);
   });
 }
-
 // Make the function accessible from the parent window
   window.getData = getData;
 </script>
-
 </body>
-
 </html>
