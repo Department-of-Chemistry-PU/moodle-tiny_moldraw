@@ -33,17 +33,12 @@ import {
     icon,
 } from './common';
 
-/**
- * Handle the action for your plugin.
- * @param {TinyMCE.editor} editor The tinyMCE editor instance.
- */
-
 const handleAction = async (editor) => {
     const modal = await Modal.create({
         type: Modal.types.DEFAULT,
         title: await getString('sketchtitle', 'tiny_moldraw'),
         body: await Templates.render('tiny_moldraw/moldraw_iframe', {
-            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`
+            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/index.html`
         }),
         show: true,
         removeOnClose: true,
@@ -53,17 +48,82 @@ const handleAction = async (editor) => {
     document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
     document.querySelector('.modal-body').style.cssText = "padding:0";
     window.console.log(editor);
+
+    // Add your button actions here
+    var isPreview = true;
+
+    async function handleClick() {
+      if (isPreview) {
+        $(this).attr('data-state', 'preview');
+        await outputImage();
+        $(this).html("Confirm & Close").attr('data-state', 'confirm');
+        isPreview = false;
+      } else {
+        closeModal();
+      }
+    }
+    $("#width, #height").on('input', outputImage);
+    $("#actionButton").click(handleClick);
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function outputImage() {
+      var output = $('#output');
+      var width = $('#width').val();
+      var height = $('#height').val();
+      ketcher.getKet().then(struct => ketcher.generateImage(struct, {
+        outputFormat: "svg",
+        backgroundColor: "255, 255, 255"
+      })).then(blob => blobToBase64(blob)).then(base64 => {
+        var img = $('<img>').attr('src', base64).attr('width', width).attr('height', height);
+        output.html('').append(img);
+      }).catch(error => window.alert(error));
+    }
+
+    function getData() {
+      return new Promise((resolve, reject) => {
+        ketcher.getKet().then(struct => {
+          ketcher.generateImage(struct, {
+            outputFormat: "svg",
+            backgroundColor: "255, 255, 255",
+          }).then(blob => blobToBase64(blob)).then(base64 => {
+            resolve({
+              dataURI: base64,
+              ketData: struct,
+            });
+          }).catch(reject);
+        }).catch(reject);
+      });
+    }
+
+    window.getData = getData;
+
+    function closeModal() {
+      var width = $('#width');
+      var height = $('#height');
+      getData().then(({ dataURI, ketData }) => {
+        if (window.parent.tinyMCE && window.parent.tinyMCE.activeEditor) {
+          var content = '<img src="' + dataURI + '" width="' + width.val() + 'px" height="' + height.val() + 'px">';
+          window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, content);
+          window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<!--'+ketData+'-->');
+        } else {
+          console.log('TinyMCE not initialized');
+        }
+        $(window.parent.document).find(".modal").find('.close').click();
+      }).catch(error => {
+        console.error('ERROR IN GETDATA', error);
+        alert(error);
+      });
+    }
 };
 
-
-/**
- * Get the setup function for the buttons.
- *
- * This is performed in an async function which ultimately returns the registration function as the
- * Tiny.AddOnManager.Add() function does not support async functions.
- *
- * @returns {function} The registration function to call within the Plugin.add function.
- */
 export const getSetup = async() => {
     const [
         startMolDrawButtonNameTitle,
@@ -76,18 +136,14 @@ export const getSetup = async() => {
     ]);
 
     return (editor) => {
-        // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
         editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the startMolDraw Toolbar Button.
         editor.ui.registry.addButton(startMolDrawButtonName, {
             icon,
             tooltip: startMolDrawButtonNameTitle,
             onAction: () => handleAction(editor),
         });
 
-        // Add the startMolDraw Menu Item.
-        // This allows it to be added to a standard menu, or a context menu.
         editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
             icon,
             text: startMolDrawMenuItemNameTitle,
