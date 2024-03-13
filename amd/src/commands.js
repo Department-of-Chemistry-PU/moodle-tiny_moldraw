@@ -35,9 +35,54 @@ import {
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
 const handleAction = (editor) => {
-    // TODO Handle the action.
-    window.console.log(editor);
+    editor.windowManager.open({
+        title: 'ChemDoodle Window',
+        body: {
+            type: 'panel',
+            items: [
+                {
+                    type: 'iframe',
+                    name: 'chemdoodle',
+                    src: '/path/to/chemdoodle/index.html',
+                    sandboxed: false
+                },
+                {
+                    type: 'button',
+                    name: 'saveButton',
+                    text: 'Save Structure',
+                    primary: true,
+                    align: 'end',
+                    disabled: false
+                }
+            ]
+        },
+        buttons: [
+            {
+                type: 'cancel',
+                text: 'Close'
+            },
+            {
+                type: 'submit',
+                text: 'Save',
+                primary: true
+            }
+        ],
+        onSubmit: (api) => {
+            // Get the structure data from ChemDoodle.
+            // This is just a placeholder, replace it with the actual code to get the data.
+            var structureData = api.getData().chemdoodle.getStructureData();
+
+            // Insert the structure data into the TinyMCE editor.
+            editor.insertContent(structureData);
+
+            // Close the window.
+            api.close();
+        },
+        width: Math.round(screen.width * 0.4),
+        height: Math.round(screen.height * 0.4),
+    });
 };
+
 
 /**
  * Get the setup function for the buttons.
