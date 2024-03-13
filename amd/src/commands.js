@@ -49,9 +49,10 @@ const handleAction = async (editor) => {
         removeOnClose: true,
     });
 
-    document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:75%;height:75vh;margin:0;padding:0;";
-    document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
-    document.querySelector('.modal-body').style.cssText = "padding:0";
+    document.querySelector('.modal-dialog').style.cssText = "display: flex; justify-content: center; align-items: center; max-width: unset; width:40%; height:40vh; margin:0 auto; padding:0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
+	document.querySelector('.modal-content').style.cssText = "max-height: unset; height:50vh;";
+	document.querySelector('.modal-body').style.cssText = "padding:0";
+
     window.console.log(editor);
 };
 
