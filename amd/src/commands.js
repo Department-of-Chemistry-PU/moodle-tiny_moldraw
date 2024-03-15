@@ -43,7 +43,8 @@ const handleAction = async (editor) => {
         type: Modal.types.DEFAULT,
         title: await getString('sketchtitle', 'tiny_moldraw'),
         body: await Templates.render('tiny_moldraw/moldraw_iframe', {
-            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`
+            // src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`,  // corrected
+            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ChemDoodle/samples/SketcherFull.html`
         }),
         show: true,
         removeOnClose: true,
