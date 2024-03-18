@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link
+      rel="stylesheet"
+      href="../chemDoodle/install/ChemDoodleWeb.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="../ChemDoodle/install/uis/jquery-ui-1.11.4.css"
+      type="text/css"
+    />
+
+    <script
+      type="text/javascript"
+      src="../chemDoodle/install/ChemDoodleWeb.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="../ChemDoodle/install/uis/ChemDoodleWeb-uis.js"
+    ></script>
+    <link rel="stylesheet" href="chem.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <title>ChemDoodle Web Component Sketcher (Full Sketcher)</title>
+  </head>
+  <body>
+    <center>
+      <br />
+      <script>
+        ChemDoodle.ELEMENT["H"].jmolColor = "black";
+        ChemDoodle.ELEMENT["S"].jmolColor = "#B9A130";
+        var sketcher = new ChemDoodle.SketcherCanvas("sketcher", 500, 300, {
+          useServices: true,
+        });
+        sketcher.styles.atoms_displayTerminalCarbonLabels_2D = true;
+        sketcher.styles.atoms_useJMOLColors = true;
+        sketcher.styles.bonds_clearOverlaps_2D = true;
+        sketcher.styles.shapes_color = "#c10000";
+        sketcher.repaint();
+      </script>
+      <br />
+      <button id="actionbutton">Insert</button>
+      <div id="output">
+        <H1>Preview Area</H1>
+        
+      </div>
+      <script src="chem.min.js"></script>
+    </center>
+  </body>
+</html>
+<!-- ../amd/build/chem.min.js -->
+<!-- C:\Users\anike\Desktop\project\Moodle_server\server\moodle\lib\editor\tiny\plugins\moldraw\amd\build\chem.min.js -->

@@ -21,17 +21,17 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getButtonImage} from 'editor_tiny/utils';
-import {get_string as getString} from 'core/str';
-import Templates from 'core/templates';
-import * as Modal from 'core/modal_factory';
-import Config from 'core/config';
+import { getButtonImage } from "editor_tiny/utils";
+import { get_string as getString } from "core/str";
+import Templates from "core/templates";
+import Modal from "core/modal";
+import Config from "core/config";
 import {
-    component,
-    startMolDrawButtonName,
-    startMolDrawMenuItemName,
-    icon,
-} from './common';
+  component,
+  startMolDrawButtonName,
+  startMolDrawMenuItemName,
+  icon,
+} from "./common";
 
 /**
  * Handle the action for your plugin.
@@ -39,23 +39,54 @@ import {
  */
 
 const handleAction = async (editor) => {
-    const modal = await Modal.create({
-        type: Modal.types.DEFAULT,
-        title: await getString('sketchtitle', 'tiny_moldraw'),
-        body: await Templates.render('tiny_moldraw/moldraw_iframe', {
-            // src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`,  // corrected
-            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ChemDoodle/samples/SketcherFull.html`
-        }),
-        show: true,
-        removeOnClose: true,
-    });
+  await Modal.create({
+    title: await getString("sketchtitle", "tiny_moldraw"),
+    body: `
+        ${await Templates.render("tiny_moldraw/moldraw_iframe", {
+          src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/chem/chem.html`,
+        })}
+        <p>Example body content</p>
+        <button id="actionbutton" class="actionbutton">Insert</button>
+        <script src="../build/chem.min.js"></script>
+      `,
+    show: true,
+    removeOnClose: true,
+  });
 
-    document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:75%;height:75vh;margin:0;padding:0;";
-    document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
-    document.querySelector('.modal-body').style.cssText = "padding:0";
-    window.console.log(editor);
+  // -------------------------
+  // Calculate the width and height for the modal
+  var screenWidth = window.innerWidth;
+  var screenHeight = window.innerHeight;
+  var modalWidth = screenWidth * 0.8; // 80% of the screen width
+  var modalHeight = screenHeight * 0.8; // 80% of the screen height
+
+  // Calculate the top and left positions to center the modal
+  var topPosition = (screenHeight - modalHeight) / 2;
+  // var leftPosition = (screenWidth - modalWidth) / 2;
+
+  // Apply CSS styles to the modal elements
+  document.querySelector(".modal-dialog").style.cssText =
+    "max-width: unset; width: " +
+    modalWidth +
+    "px; height: " +
+    modalHeight +
+    "px; margin: " +
+    topPosition +
+    "px auto; padding: 0;";
+  document.querySelector(".modal-content").style.cssText =
+    "max-height: unset; height: 100vh;";
+  document.querySelector(".modal-body").style.cssText = "padding: 0;";
+  window.console.log(editor);
+
+  // -------------------------
+
+  // document.querySelector(".modal-dialog").style.cssText =
+  //   "max-width: unset;width:75%;height:75vh;margin:0;padding:0;";
+  // document.querySelector(".modal-content").style.cssText =
+  //   "max-height: unset;height:100vh;";
+  // document.querySelector(".modal-body").style.cssText = "padding:0";
+  // window.console.log(editor);
 };
-
 
 /**
  * Get the setup function for the buttons.
@@ -65,34 +96,34 @@ const handleAction = async (editor) => {
  *
  * @returns {function} The registration function to call within the Plugin.add function.
  */
-export const getSetup = async() => {
-    const [
-        startMolDrawButtonNameTitle,
-        startMolDrawMenuItemNameTitle,
-        buttonImage,
-    ] = await Promise.all([
-        getString('button_startMolDraw', component),
-        getString('menuitem_startMolDraw', component),
-        getButtonImage('icon', component),
-    ]);
+export const getSetup = async () => {
+  const [
+    startMolDrawButtonNameTitle,
+    startMolDrawMenuItemNameTitle,
+    buttonImage,
+  ] = await Promise.all([
+    getString("button_startMolDraw", component),
+    getString("menuitem_startMolDraw", component),
+    getButtonImage("icon", component),
+  ]);
 
-    return (editor) => {
-        // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
-        editor.ui.registry.addIcon(icon, buttonImage.html);
+  return (editor) => {
+    // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
+    editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the startMolDraw Toolbar Button.
-        editor.ui.registry.addButton(startMolDrawButtonName, {
-            icon,
-            tooltip: startMolDrawButtonNameTitle,
-            onAction: () => handleAction(editor),
-        });
+    // Register the startMolDraw Toolbar Button.
+    editor.ui.registry.addButton(startMolDrawButtonName, {
+      icon,
+      tooltip: startMolDrawButtonNameTitle,
+      onAction: () => handleAction(editor),
+    });
 
-        // Add the startMolDraw Menu Item.
-        // This allows it to be added to a standard menu, or a context menu.
-        editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
-            icon,
-            text: startMolDrawMenuItemNameTitle,
-            onAction: () => handleAction(editor),
-        });
-    };
+    // Add the startMolDraw Menu Item.
+    // This allows it to be added to a standard menu, or a context menu.
+    editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
+      icon,
+      text: startMolDrawMenuItemNameTitle,
+      onAction: () => handleAction(editor),
+    });
+  };
 };
