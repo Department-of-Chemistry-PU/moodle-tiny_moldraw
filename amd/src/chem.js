@@ -30,7 +30,7 @@ $(document).ready(function () {
 
     let molFile = ChemDoodle.writeMOL(mol);
     //   console.log(molFile);
-    src = ChemDoodle.io.png.string(sketcher);
+    src = ChemDoodle.io.png.string(mol);
 
     let img = document.createElement("img");
     img.src = src;

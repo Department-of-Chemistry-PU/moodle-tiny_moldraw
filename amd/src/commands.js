@@ -31,7 +31,7 @@ import {
   startMolDrawButtonName,
   startMolDrawMenuItemName,
   icon,
-} from "./common";
+} from "./common";  
 
 /**
  * Handle the action for your plugin.
@@ -39,31 +39,26 @@ import {
  */
 
 const handleAction = async (editor) => {
-  await Modal.create({
+  await Modal.create ({
     title: await getString("sketchtitle", "tiny_moldraw"),
     body: `
         ${await Templates.render("tiny_moldraw/moldraw_iframe", {
           src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/chem/chem.html`,
         })}
-        <p>Example body content</p>
-        <button id="actionbutton" class="actionbutton">Insert</button>
-        <script src="../build/chem.min.js"></script>
+        
       `,
+    footer: `<p>Example body content</p>
+      <button id="actionbutton" class="actionbutton">Insert</button>
+      <script src="chem.min.js"></script>`,
     show: true,
     removeOnClose: true,
   });
 
   // -------------------------
   // Calculate the width and height for the modal
-  var screenWidth = window.innerWidth;
-  var screenHeight = window.innerHeight;
-  var modalWidth = screenWidth * 0.8; // 80% of the screen width
-  var modalHeight = screenHeight * 0.8; // 80% of the screen height
-
-  // Calculate the top and left positions to center the modal
-  var topPosition = (screenHeight - modalHeight) / 2;
-  // var leftPosition = (screenWidth - modalWidth) / 2;
-
+  var modalWidth = 850;
+  var modalHeight = 600; // 80% of the screen height
+  topPosition = (screenHeight - modalHeight) / 2;
   // Apply CSS styles to the modal elements
   document.querySelector(".modal-dialog").style.cssText =
     "max-width: unset; width: " +
@@ -74,18 +69,17 @@ const handleAction = async (editor) => {
     topPosition +
     "px auto; padding: 0;";
   document.querySelector(".modal-content").style.cssText =
-    "max-height: unset; height: 100vh;";
+    "max-height: 600px; height: 100vh;";
   document.querySelector(".modal-body").style.cssText = "padding: 0;";
   window.console.log(editor);
-
-  // -------------------------
-
-  // document.querySelector(".modal-dialog").style.cssText =
-  //   "max-width: unset;width:75%;height:75vh;margin:0;padding:0;";
-  // document.querySelector(".modal-content").style.cssText =
-  //   "max-height: unset;height:100vh;";
-  // document.querySelector(".modal-body").style.cssText = "padding:0";
-  // window.console.log(editor);
+  // ------------------------
+  // unbuild changes
+  var linkElement = document.createElement("link");
+  linkElement.rel = "stylesheet"; // Set the rel attribute to "stylesheet"
+  linkElement.href = "../..moldraw/chem/chem.css"; // Set the href attribute to the CSS file URL
+  // Append the link element to the head of the document
+  document.head.appendChild(linkElement);
+  // ------------------------------------------------------------------------
 };
 
 /**

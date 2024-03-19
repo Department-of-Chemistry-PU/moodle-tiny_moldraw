@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
@@ -25,29 +26,29 @@
     <title>ChemDoodle Web Component Sketcher (Full Sketcher)</title>
   </head>
   <body>
-    <center>
-      <br />
-      <script>
-        ChemDoodle.ELEMENT["H"].jmolColor = "black";
-        ChemDoodle.ELEMENT["S"].jmolColor = "#B9A130";
-        var sketcher = new ChemDoodle.SketcherCanvas("sketcher", 500, 300, {
-          useServices: true,
-        });
-        sketcher.styles.atoms_displayTerminalCarbonLabels_2D = true;
-        sketcher.styles.atoms_useJMOLColors = true;
-        sketcher.styles.bonds_clearOverlaps_2D = true;
-        sketcher.styles.shapes_color = "#c10000";
-        sketcher.repaint();
-      </script>
-      <br />
-      <button id="actionbutton">Insert</button>
-      <div id="output">
-        <H1>Preview Area</H1>
-        
-      </div>
-      <script src="chem.min.js"></script>
-    </center>
+    <div id="container">
+      <center>
+        <br />
+        <script>
+          ChemDoodle.ELEMENT["H"].jmolColor = "black";
+          ChemDoodle.ELEMENT["S"].jmolColor = "#B9A130";
+          var sketcher = new ChemDoodle.SketcherCanvas("sketcher", 600, 350, {
+            useServices: true,
+          });
+          sketcher.styles.atoms_displayTerminalCarbonLabels_2D = true;
+          sketcher.styles.atoms_useJMOLColors = true;
+          sketcher.styles.bonds_clearOverlaps_2D = true;
+          sketcher.styles.shapes_color = "#c10000";
+          sketcher.repaint();
+        </script>
+        <br />
+        <div id="output">
+          <H1>Preview Area</H1>
+          
+        </div>
+      </center>
+    </div>
+    <button id="actionbutton">Insert</button>
+    <script src="chem.min.js"></script>
   </body>
 </html>
-<!-- ../amd/build/chem.min.js -->
-<!-- C:\Users\anike\Desktop\project\Moodle_server\server\moodle\lib\editor\tiny\plugins\moldraw\amd\build\chem.min.js -->
