@@ -31,7 +31,7 @@ import {
   startMolDrawButtonName,
   startMolDrawMenuItemName,
   icon,
-} from "./common";  
+} from "./common";
 
 /**
  * Handle the action for your plugin.
@@ -39,26 +39,27 @@ import {
  */
 
 const handleAction = async (editor) => {
-  await Modal.create ({
+  await Modal.create({
     title: await getString("sketchtitle", "tiny_moldraw"),
     body: `
         ${await Templates.render("tiny_moldraw/moldraw_iframe", {
-          src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/chem/chem.html`,
-        })}
+      src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/chem/chem.html`,
+    })}
         
       `,
     footer: `<p>Example body content</p>
       <button id="actionbutton" class="actionbutton">Insert</button>
-      <script src="chem.min.js"></script>`,
+      <script src="http://localhost/lib/editor/tiny/plugins/moldraw/chem/chem2.js"></script>`,
     show: true,
     removeOnClose: true,
   });
 
   // -------------------------
   // Calculate the width and height for the modal
-  var modalWidth = 850;
-  var modalHeight = 600; // 80% of the screen height
-  topPosition = (screenHeight - modalHeight) / 2;
+  let modalWidth = 850;
+  let modalHeight = 600; // 80% of the screen height
+  let screenHeight = window.innerHeight;
+  let topPosition = (screenHeight - modalHeight) / 2;
   // Apply CSS styles to the modal elements
   document.querySelector(".modal-dialog").style.cssText =
     "max-width: unset; width: " +
@@ -72,14 +73,7 @@ const handleAction = async (editor) => {
     "max-height: 600px; height: 100vh;";
   document.querySelector(".modal-body").style.cssText = "padding: 0;";
   window.console.log(editor);
-  // ------------------------
-  // unbuild changes
-  var linkElement = document.createElement("link");
-  linkElement.rel = "stylesheet"; // Set the rel attribute to "stylesheet"
-  linkElement.href = "../..moldraw/chem/chem.css"; // Set the href attribute to the CSS file URL
-  // Append the link element to the head of the document
-  document.head.appendChild(linkElement);
-  // ------------------------------------------------------------------------
+
 };
 
 /**
