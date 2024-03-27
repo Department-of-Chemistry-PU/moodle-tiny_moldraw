@@ -56,9 +56,11 @@ const handleAction = async (editor) => {
 
   // -------------------------
   // Calculate the width and height for the modal
+
+  var screenHeight = window.innerHeight;
   var modalWidth = 850;
   var modalHeight = 600; // 80% of the screen height
-  topPosition = (screenHeight - modalHeight) / 2;
+  let topPosition = (screenHeight - modalHeight) / 2;
   // Apply CSS styles to the modal elements
   document.querySelector(".modal-dialog").style.cssText =
     "max-width: unset; width: " +

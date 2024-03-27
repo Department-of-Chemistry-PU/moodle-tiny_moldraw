@@ -19,18 +19,16 @@ $(document).ready(function () {
       closeModal();
     }
   }
-
-  //   function handleClick() {
-  //     outputImage();
-
-  //   }
+  function handleClick() {
+    closeModal();
+  }
 
   function outputImage() {
     let mol = sketcher.getMolecule();
 
     let molFile = ChemDoodle.writeMOL(mol);
-    //   console.log(molFile);
-    src = ChemDoodle.io.png.string(mol);
+      console.log(molFile);
+    src = ChemDoodle.io.png.string(sketcher);
 
     let img = document.createElement("img");
     img.src = src;
@@ -42,37 +40,35 @@ $(document).ready(function () {
 
   function closeModal() {
     if (window.parent.tinyMCE && window.parent.tinyMCE.activeEditor) {
-      if (true) {
-        let mol = sketcher.getMolecule();
-        let src = ChemDoodle.io.png.string(sketcher);
-        let molFile = ChemDoodle.writeMOL(mol);
+      let mol = sketcher.getMolecule();
+      let src = ChemDoodle.io.png.string(sketcher);
+      let molFile = ChemDoodle.writeMOL(mol);
 
-        let width = prompt("width:");
-        let height = prompt("height:");
+      // let width = prompt("width:");
+      // let height = prompt("height:");
+      let width = 400;
+      let height = 300;
 
-        var content =
-          '<img src="' +
-          src +
-          '" width="' +
-          width +
-          'px" height="' +
-          height +
-          'px">';
-        console.log(molFile, content, width, height);
+      var content =
+        '<img src="' +
+        src +
+        '" width="' +
+        width +
+        'px" height="' +
+        height +
+        'px">';
 
-        window.parent.tinyMCE.activeEditor.execCommand(
-          "mceInsertContent",
-          0,
-          content
-        );
-        window.parent.tinyMCE.activeEditor.execCommand(
-          "mceInsertContent",
-          0,
-          "<!--" + molFile + "-->"
-        );
-      } else {
-        console.log("TinyMCE not initialized");
-      }
+      window.parent.tinyMCE.activeEditor.execCommand(
+        "mceInsertContent",
+        0,
+        content
+      );
+      window.parent.tinyMCE.activeEditor.execCommand(
+        "mceInsertContent",
+        0,
+        "<!--" + molFile + "-->"
+      );
+
       $(window.parent.document).find(".modal").find(".close").click();
     }
   }
