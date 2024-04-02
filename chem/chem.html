@@ -6,9 +6,8 @@
   <link rel="stylesheet" href="../ChemDoodle/install/uis/jquery-ui-1.11.4.css" type="text/css" />
   <script type="text/javascript" src="../chemDoodle/install/ChemDoodleWeb.js"></script>
   <script type="text/javascript" src="../ChemDoodle/install/uis/ChemDoodleWeb-uis.js"></script>
-  <link rel="stylesheet" href="chem.css" type="text/css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <title>ChemDoodle Web Component Sketcher (Full Sketcher)</title>
+  <link rel="stylesheet" href="chem.css" type="text/css"/>
+  <title>ChemDoodle Sketcher</title>
 </head>
 
 <body>
@@ -30,7 +29,7 @@
     </div>
 
     <div class="button_container">
-      <button id="resize" onclick="function_resize()">Resize</button>
+      <button id="resize" onclick="functionResize()">Resize</button>
       <button id="actionbutton">Insert</button>
     </div>
 
@@ -40,66 +39,6 @@
 
 
   </div>
-
-
-  <script>
-
-    // Main Canvas
-    ChemDoodle.ELEMENT["H"].jmolColor = "black";
-    ChemDoodle.ELEMENT["S"].jmolColor = "#B9A130";
-    var sketcher = new ChemDoodle.SketcherCanvas("drawing_canvas", 600, 350, {
-      useServices: true,
-    });
-    sketcher.styles.atoms_displayTerminalCarbonLabels_2D = true;
-    sketcher.styles.atoms_useJMOLColors = true;
-    sketcher.styles.bonds_clearOverlaps_2D = true;
-    sketcher.styles.shapes_color = "#c10000";
-    sketcher.repaint();
-
-    // Preview ketcher.
-    const sketcher_viewer = new ChemDoodle.ViewerCanvas('veiw_canvas', 100, 100);
-    sketcher_viewer.styles.atoms_displayTerminalCarbonLabels_2D = true;
-    sketcher_viewer.styles.atoms_useJMOLColors = true;
-    sketcher_viewer.styles.bonds_clearOverlaps_2D = true;
-    //sketcher_viewer.repaint();
-    sketcher_viewer.emptyMessage = 'No data loaded';
-    sketcher.oldFunc = sketcher.checksOnAction;
-
-
-    sketcher.checksOnAction = function (force) {
-      this.oldFunc(force);
-      //sketcher.repaint();
-      let mols = sketcher.molecules;
-      let forms = sketcher.shapes;
-      sketcher_viewer.loadContent(mols, forms);
-      sketcher.center();
-      for (let i = 0, ii = this.molecules.length; i < ii; i++) {
-        this.molecules[i].check();
-      }
-    }
-    function function_resize() {
-        let input_width = document.getElementById('width_input_box').valueAsNumber;
-        let input_height = document.getElementById('height_input_box').valueAsNumber;
-        let width;
-        let height;
-
-        if (input_width > 100) {
-            width = input_width;
-        } else {
-            width = 100;
-        }
-
-        if (input_height > 100) {
-            console.log('inif');
-            height = input_height;
-        } else {
-            console.log('inelse');
-            height = 100;
-        }
-        sketcher_viewer.resize(width, height);
-    }
-
-  </script>
   <script src="chem.js"></script>
 </body>
 
