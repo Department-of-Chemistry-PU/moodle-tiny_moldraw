@@ -1,3 +1,10 @@
+/**
+ * Tiny tiny_moldraw for Moodle.
+ *
+ * @module      tiny_moldraw/plugin
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 export function loadBody() {
   return new Promise((resolve, reject) => {
       try {
@@ -33,7 +40,6 @@ export function loadBody() {
           </div>
           <button id=" insert" onclick="insert()">Insert</button>
           <script src="http://localhost/lib/editor/tiny/plugins/moldraw/chem/app.js"></script>`;
-          
           resolve(bodyContent);
       } catch (error) {
           reject(error);
@@ -41,12 +47,14 @@ export function loadBody() {
   });
 }
 
+/**
+ *
+ */
 export function loadFooter() {
   return new Promise((resolve, reject) => {
       try {
           const footerContent = `<p>Example body content</p>
           <button id="actionbutton" class="actionbutton">Insert</button>`;
-          
           resolve(footerContent);
       } catch (error) {
           reject(error);

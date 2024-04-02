@@ -2,9 +2,9 @@ import { getButtonImage } from "editor_tiny/utils";
 import { get_string as getString } from "core/str";
 import Modal from "core/modal";
 import { component, startMolDrawButtonName, startMolDrawMenuItemName, icon } from "./common";
-import { loadBody, loadFooter } from "./chem/body";
+import { loadBody, loadFooter } from "./body";
 
-const handleAction = async (editor) => {
+const handleAction = async() => {
   try {
     const title = await getString("sketchtitle", "tiny_moldraw");
     const bodyContent = await loadBody();
