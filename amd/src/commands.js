@@ -1,38 +1,11 @@
-import { getButtonImage } from "editor_tiny/utils";
-import { get_string as getString } from "core/str";
-import Modal from "core/modal";
-import { component, startMolDrawButtonName, startMolDrawMenuItemName, icon } from "./common";
-import { loadBody, loadFooter } from "./body";
+import {getButtonImage} from "editor_tiny/utils";
+import {get_string as getString} from "core/str";
+import {handleAction} from "./ui";
 
-const handleAction = async() => {
-  try {
-    const title = await getString("sketchtitle", "tiny_moldraw");
-    const bodyContent = await loadBody();
-    const footerContent = await loadFooter();
+import {component, startMolDrawButtonName, startMolDrawMenuItemName, icon} from "./common";
 
-    await Modal.create({
-      title: title,
-      body: bodyContent,
-      footer: footerContent,
-      show: true,
-      removeOnClose: true,
-    });
-
-    const modalWidth = 850;
-    const modalHeight = 600;
-    const screenHeight = window.innerHeight;
-    const topPosition = (screenHeight - modalHeight) / 2;
-    document.querySelector(".modal-dialog").style.cssText =
-      `max-width: unset; width: ${modalWidth}px; height: ${modalHeight}px; margin: ${topPosition}px auto; padding: 0;`;
-    document.querySelector(".modal-content").style.cssText =
-      "max-height: 600px; height: 100vh;";
-    document.querySelector(".modal-body").style.cssText = "padding: 0;";
-  } catch (error) {
-    console.error("Error handling action:", error);
-  }
-};
-
-export const getSetup = async () => {
+// eslint-disable-next-line consistent-return
+export const getSetup = async() => {
   try {
     const [startMolDrawButtonNameTitle, startMolDrawMenuItemNameTitle, buttonImage] = await Promise.all([
       getString("button_startMolDraw", component),
@@ -56,6 +29,7 @@ export const getSetup = async () => {
       });
     };
   } catch (error) {
-    console.error("Error setting up plugin:", error);
+    // eslint-disable-next-line no-alert
+    alert("Error setting up plugin:", error);
   }
 };

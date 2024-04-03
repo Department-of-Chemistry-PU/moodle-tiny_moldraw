@@ -2,7 +2,7 @@ async function loadResource(url, type) {
     return new Promise((resolve, reject) => {
         if (type === 'script') {
             var script = document.createElement("script");
-            script.type = "text/javascript";
+            script.type = "text/javascript";  
             script.onload = resolve;
             script.onerror = reject;
             script.src = url;
