@@ -21,7 +21,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {buttonName,icon} from './common';
+import {buttonName} from './common';
 import uploadFile from 'editor_tiny/uploader';
 import {addContextmenuItem,} from 'editor_tiny/utils';
 

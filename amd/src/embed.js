@@ -34,7 +34,7 @@ export const KetcherEmbed = class {
     }
     init = async() => {
         const modal = await Modal.create({
-            title: getString('ketchertitle', 'tiny_keteditor'),
+            title: getString('buttonNameTitle', 'tiny_keteditor'),
             show: true,
             removeOnClose: true,
         });
@@ -44,15 +44,23 @@ export const KetcherEmbed = class {
                 js
             }) => {
             Templates.appendNodeContents(modal.getBody(), html, js);
-			const scripturl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/static/js/main.963f80c2.js`);
-			var script = document.createElement('script');
-			script.src = scripturl.toString();
-			document.body.appendChild(script); // Append the script to the body	
-			const cssurl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/static/css/main.3fc9c0f8.css`);
-			var link = document.createElement('link');
-			link.href = cssurl.toString();
-			link.rel = 'stylesheet';
-			document.head.appendChild(link); // Append the link to the head
+const scripturl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/keteditor/ketcher/static/js/main.963f80c2.js`);
+var script = document.createElement('script');
+script.src = scripturl.toString();
+document.body.appendChild(script); // Append the script to the body
+const sketchurl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/keteditor/ketcher/sketch.js`);
+var script = document.createElement('script');
+script.src = sketchurl.toString();
+var button = document.createElement('button');
+button.id = "actionButton";
+button.className = "btn btn-primary";
+button.textContent = "Save";
+document.body.appendChild(button, script);
+const cssurl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/keteditor/ketcher/static/css/main.3fc9c0f8.css`);
+var link = document.createElement('link');
+link.href = cssurl.toString();
+link.rel = 'stylesheet';
+document.head.appendChild(link); // Append the link to the head
         })
         .catch((error) => displayException(error));
     };

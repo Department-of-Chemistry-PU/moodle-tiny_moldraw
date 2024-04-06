@@ -23,14 +23,14 @@
 
 import {getTinyMCE} from 'editor_tiny/loader';
 import {getPluginMetadata} from 'editor_tiny/utils';
-import {component,pluginName,icon,} from './common';
+
+import {component, pluginName,} from './common';
+import {register as registerOptions} from './options';
 import {getSetup as getCommandSetup} from './commands';
 import * as Configuration from './configuration';
 
-// Setup the tiny_keteditor Plugin.
+// Setup the tiny_ketcher Plugin.
 export default new Promise(async(resolve) => {
-    // Note: The PluginManager.add function does not support asynchronous configuration.
-    // Perform any asynchronous configuration here, and then call the PluginManager.add function.
     const [
         tinyMCE,
         pluginMetadata,
@@ -41,7 +41,6 @@ export default new Promise(async(resolve) => {
                 getCommandSetup(),
             ]);
 
-    // Reminder: Any asynchronous code must be run before this point.
     tinyMCE.PluginManager.add(pluginName, (editor) => {
         // Register any options that your plugin has
         registerOptions(editor);

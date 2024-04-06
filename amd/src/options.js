@@ -14,18 +14,38 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Common values helper for the Moodle tiny_keteditor plugin.
+ * Options helper for the Moodle tiny_ketcher plugin.
  *
- * @module      tiny_keteditor/common
+ * @module      tiny_keteditor/options
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-const component = 'tiny_keteditor';
+import {getPluginOptionName} from 'editor_tiny/options';
+import {pluginName} from './common';
 
-export default {
-    component,
-    pluginName: `${component}/plugin`,
-    icon: component,
-    buttonName: `KetcherDraw`,
+// Helper variables for the option names.
+const showPlugin = getPluginOptionName(pluginName, 'showplugin');
+
+/**
+ * Options registration function.
+ *
+ * @param {tinyMCE} editor
+ */
+export const register = (editor) => {
+    const registerOption = editor.options.register;
+
+    registerOption(showPlugin, {
+        processor: 'boolean',
+        "default": true,
+    });
 };
+
+/**
+ * Fetch the myFirstProperty value for this editor instance.
+ *
+ * @param {tinyMCE} editor The editor instance to fetch the value for
+ * @returns {object} The value of the myFirstProperty option
+ */
+export const isPluginVisible = (editor) => editor.options.get(showPlugin);
+

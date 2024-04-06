@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var iframe = document.getElementById('tinymce_ketcher-iframe');
+    var iframe = document.getElementById('ketcher-root');
 // Define ketcher in the global scope
     window.ketcher = null;
     var checkKetcherInterval = setInterval(function() {
