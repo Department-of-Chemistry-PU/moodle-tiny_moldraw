@@ -14,85 +14,108 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Commands helper for the Moodle tiny_moldraw plugin.
+ * Common values helper for the Moodle tiny_moldraw plugin.
  *
  * @module      tiny_moldraw/commands
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getButtonImage} from 'editor_tiny/utils';
-import {get_string as getString} from 'core/str';
-import Templates from 'core/templates';
-import * as Modal from 'core/modal_factory';
-import Config from 'core/config';
+import {
+    getButtonImage
+}
+from 'editor_tiny/utils';
+import {
+    get_string as getString
+}
+from 'core/str';
 import {
     component,
-    startMolDrawButtonName,
-    startMolDrawMenuItemName,
+    ketcherButtonName,
     icon,
-} from './common';
+}
+from './common';
+import {
+    KetcherEmbed
+}
+from './embed';
 
 /**
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
 
-const handleAction = async (editor) => {
-    const modal = await Modal.create({
-        type: Modal.types.DEFAULT,
-        title: await getString('sketchtitle', 'tiny_moldraw'),
-        body: await Templates.render('tiny_moldraw/moldraw_iframe', {
-            src: `${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`
-        }),
-        show: true,
-        removeOnClose: true,
-    });
-
-    document.querySelector('.modal-dialog').style.cssText = "display: flex; justify-content: center; align-items: center; max-width: unset; width:40%; height:40vh; margin:0 auto; padding:0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);";
-	document.querySelector('.modal-content').style.cssText = "max-height: unset; height:50vh;";
-	document.querySelector('.modal-body').style.cssText = "padding:0";
-
-    window.console.log(editor);
+const handleAction = (editor) => {
+    const ketcherImage = new KetcherEmbed(editor);
+    ketcherImage.init();
 };
 
-
-/**
- * Get the setup function for the buttons.
- *
- * This is performed in an async function which ultimately returns the registration function as the
- * Tiny.AddOnManager.Add() function does not support async functions.
- *
- * @returns {function} The registration function to call within the Plugin.add function.
- */
 export const getSetup = async() => {
+    const isImage = (node) => node.nodeName.toLowerCase() === 'img';
+
     const [
-        startMolDrawButtonNameTitle,
-        startMolDrawMenuItemNameTitle,
+        ketcherButtonNameTitle,
         buttonImage,
     ] = await Promise.all([
-        getString('button_startMolDraw', component),
-        getString('menuitem_startMolDraw', component),
-        getButtonImage('icon', component),
-    ]);
+                getString('ketcherButtonNameTitle', component),
+                getString('ketcherButtonNameTitle', component),
+                getButtonImage('icon', component),
+            ]);
 
     return (editor) => {
         // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
         editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the startMolDraw Toolbar Button.
-        editor.ui.registry.addButton(startMolDrawButtonName, {
+        // Register the startdemo Toolbar Button.
+        editor.ui.registry.addButton(ketcherButtonName, {
             icon,
-            tooltip: startMolDrawButtonNameTitle,
+            tooltip: ketcherButtonNameTitle,
             onAction: () => handleAction(editor),
         });
 
-        // Add the startMolDraw Menu Item.
-        // This allows it to be added to a standard menu, or a context menu.
-        editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
+        editor.ui.registry.addToggleButton(ketcherButtonName, {
             icon,
-            text: startMolDrawMenuItemNameTitle,
+            tooltip: ketcherButtonNameTitle,
+            onAction: () => handleAction(editor, window.json),
+            onSetup: api => {
+                return editor.selection.selectorChangedWithUnbind(
+                    'img:not([data-mce-object]):not([data-mce-placeholder]),figure.image',
+                    function () {
+                    var node = editor.selection.getNode();
+                    var parentNode = node.parentNode;
+                    const html = editor.serializer.serialize(parentNode);
+                    const commentMatch = html.match(/<!--(.*?)-->/);
+                    if (commentMatch) {
+                        try {
+                            var json = JSON.parse(commentMatch[1]);
+                            // If the comment contains valid JSON, call api.setActive and store the JSON
+                            api.setActive(true);
+                            window.json = JSON.stringify(json); // Save the JSON to window.json
+                        } catch (e) {
+                            // If the comment does not contain valid JSON, call api.setActive with false
+                            api.setActive(false);
+                        }
+                    } else {
+                        api.setActive(false);
+                    }
+                }).unbind;
+            }
+        });
+
+        editor.ui.registry.addContextToolbar(ketcherButtonName, {
+            predicate: isImage,
+            items: ketcherButtonName,
+            position: 'node',
+            scope: 'node'
+        });
+
+        // Add the startdemo Menu Item.
+        // This allows it to be added to a standard menu, or a context menu.
+        editor.ui.registry.addMenuItem(ketcherButtonName, {
+            icon,
+            text: ketcherButtonNameTitle,
             onAction: () => handleAction(editor),
         });
+
     };
 };

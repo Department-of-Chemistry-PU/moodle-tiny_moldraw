@@ -21,8 +21,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getPluginOptionName} from 'editor_tiny/options';
-import {pluginName} from './common';
+import {
+    getPluginOptionName
+}
+from 'editor_tiny/options';
+import {
+    pluginName
+}
+from './common';
 
 // Helper variables for the option names.
 const myFirstPropertyName = getPluginOptionName(pluginName, 'myFirstProperty');

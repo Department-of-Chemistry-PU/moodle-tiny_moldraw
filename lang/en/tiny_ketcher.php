@@ -15,15 +15,17 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Plugin strings are defined here.
  *
  * @package     tiny_moldraw
+ * @category    string
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'tiny_moldraw';
-$plugin->release = '0.1.1';
-$plugin->version = 2024030200;
+$string['pluginname'] = 'Chemical Structure Editor';
+$string['ketcherButtonNameTitle'] = 'Ketcher Editor';
+$string['privacy:metadata'] = 'Ketcher does not store any personal data';
+$string['ketchertitle'] = 'Ketcher Chemical Structure Editor';

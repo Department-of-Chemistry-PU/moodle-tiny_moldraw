@@ -27,6 +27,5 @@ export default {
     component,
     pluginName: `${component}/plugin`,
     icon: component,
-    startMolDrawButtonName: `${component}_startMolDraw`,
-    startMolDrawMenuItemName: `${component}_startMolDraw`,
+    ketcherButtonName: `startKetcher`,
 };
