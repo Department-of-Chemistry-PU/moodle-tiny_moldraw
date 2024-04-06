@@ -14,110 +14,45 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Common values helper for the Moodle tiny_moldraw plugin.
+ * Common values helper for the Moodle tiny_keteditor plugin.
  *
- * @module      tiny_moldraw/embed
+ * @module      tiny_keteditor/embed
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {
-    get_string as getString
-}
-from 'core/str';
+import {get_string as getString} from 'core/str';
 import Templates from 'core/templates';
 import Modal from 'core/modal';
 import Config from 'core/config';
-import {
-    exception as displayException
-}
-from 'core/notification';
+import {exception as displayException} from 'core/notification';
 
 export const KetcherEmbed = class {
     editor = null;
-    canShowFilePicker = false;
-
-    /**
-     * @property {Object} The names of the alignment options.
-     */
-    helpStrings = null;
-
-    /**
-     * @property {boolean} Indicate that the user is updating the media or not.
-     */
-    isUpdating = false;
-
     constructor(editor) {
         this.editor = editor;
     }
-
-    getIframeURL = () => {
-        const url = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/sketch.html`);
-        return url.toString();
-    };
-
     init = async() => {
         const modal = await Modal.create({
-            title: getString('ketchertitle', 'tiny_moldraw'),
+            title: getString('ketchertitle', 'tiny_keteditor'),
             show: true,
             removeOnClose: true,
         });
-
-
-
-        var modalDialog = document.querySelector(".modal-dialog");
-        var modalContent = document.querySelector(".modal-content");
-        var modalBody = document.querySelector(".modal-body");
-        var modalFooter = document.querySelector(".modal-footer");
-
-        if (window.matchMedia("(max-width: 768px)").matches) {
-            modalDialog.style.cssText = "width: 90%; height: 90%; margin: 5% auto; padding: 0;";
-        } else {
-            modalDialog.style.cssText = "width: 850px; height: 720px; margin: auto; padding: 0;";
-        }
-
-        modalContent.style.cssText = "height: 100%; max-height: 100%;";
-        modalBody.style.cssText = "padding: 0; height: 80vh; overflow-y:inherit !important";
-        modalFooter.style.cssText = "display: inherit; height: 50px;";
-
-        Templates.renderForPromise('tiny_moldraw/ketcher_iframe', {
-            src: this.getIframeURL()
-        })
+        Templates.renderForPromise('tiny_keteditor/ketcher_template',{})
         .then(({
                 html,
                 js
             }) => {
             Templates.appendNodeContents(modal.getBody(), html, js);
-            // Get the iframe element
-            const iframe = document.getElementById('tinymce_ketcher-iframe');
-            // Set the height of the iframe to 100%
-            iframe.style.height = '100%';
-            iframe.style.width = '100%';
-            // Add a load event listener to the iframe
-            iframe.addEventListener('load', function () {
-                // Make sure window.ketData is valid
-                if (window.json) {
-                    // Call the ketcher.setMolecule API after a delay
-                    setTimeout(function () {
-                        if (iframe.contentWindow.ketcher) {
-                            iframe.contentWindow.ketcher.setMolecule(window.json);
-                        } else {
-                            window.console.log('ketcher is not defined');
-                        }
-                    }, 1000); // Adjust the delay as needed
-                }
-            });
-
-            // Add the script to the modal footer after the iframe is loaded
-            const scripturl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/sketch.js`);
-            var script = document.createElement('script');
-            script.src = scripturl.toString();
-            var button = document.createElement('button');
-            button.id = "actionButton";
-            button.className = "btn btn-primary";
-            button.textContent = "Save";
-            modal.getFooter().append(button, script);
-
+			const scripturl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/static/js/main.963f80c2.js`);
+			var script = document.createElement('script');
+			script.src = scripturl.toString();
+			document.body.appendChild(script); // Append the script to the body	
+			const cssurl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/ketcher/ketcher/static/css/main.3fc9c0f8.css`);
+			var link = document.createElement('link');
+			link.href = cssurl.toString();
+			link.rel = 'stylesheet';
+			document.head.appendChild(link); // Append the link to the head
         })
         .catch((error) => displayException(error));
     };

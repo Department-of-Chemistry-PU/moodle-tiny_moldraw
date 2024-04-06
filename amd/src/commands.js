@@ -14,31 +14,17 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Common values helper for the Moodle tiny_moldraw plugin.
+ * Common values helper for the Moodle tiny_keteditor plugin.
  *
- * @module      tiny_moldraw/commands
+ * @module      tiny_keteditor/commands
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {
-    getButtonImage
-}
-from 'editor_tiny/utils';
-import {
-    get_string as getString
-}
-from 'core/str';
-import {
-    component,
-    ketcherButtonName,
-    icon,
-}
-from './common';
-import {
-    KetcherEmbed
-}
-from './embed';
+import {getButtonImage} from 'editor_tiny/utils';
+import {get_string as getString} from 'core/str';
+import {component,icon,buttonName,} from './common';
+import {KetcherEmbed} from './embed';
 
 /**
  * Handle the action for your plugin.
@@ -48,17 +34,59 @@ from './embed';
 const handleAction = (editor) => {
     const ketcherImage = new KetcherEmbed(editor);
     ketcherImage.init();
+	
+	// Get the ketcher instance from the global scope
+    var ketcher = window.ketcher;
+
+    // Add an event listener for the 'actionButton' click event
+    $("#actionButton").click(function() {
+        handleAction(ketcher);
+    });
+};
+
+    async function handleAction(ketcher) {
+    var struct = await ketcher.getKet();
+    var image = await ketcher.generateImage(struct, {
+        outputFormat: "svg",
+        backgroundColor: "255, 255, 255"
+    });
+    // Create a new FileReader instance
+    var reader = new FileReader();
+    // Add an event listener for the 'load' event
+    reader.addEventListener('load', function() {
+        // The result attribute contains the data as a Base64 encoded string
+        var base64Image = reader.result;
+        // Parse the SVG to get the width and height
+        var parser = new DOMParser();
+        var svgDoc = parser.parseFromString(atob(base64Image.split(',')[1]), "image/svg+xml");
+        var svgElement = svgDoc.documentElement;
+        var width = svgElement.getAttribute("width");
+        var height = svgElement.getAttribute("height");
+        if (window.parent.tinyMCE && window.parent.tinyMCE.activeEditor) {
+            var url = URL.createObjectURL(image);
+            var ketString = JSON.stringify(struct);
+            var ketStruct = ketString.replace(/\\n/g, '').replace(/\\"/g, '"').replace(/ /g, '').slice(1, -1);
+            var content = '<img src="' + url + '" width="' + width + '" height="' + height + '">';		
+            window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, content);
+            window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<!--' + ketStruct + '-->');
+        } else {
+            console.log('TinyMCE not initialized');
+        }
+        $(window.parent.document).find(".modal").find('.close').click();
+    });
+    // Start reading the Blob as a Base64 encoded string
+    reader.readAsDataURL(image);
 };
 
 export const getSetup = async() => {
     const isImage = (node) => node.nodeName.toLowerCase() === 'img';
 
     const [
-        ketcherButtonNameTitle,
+        buttonNameTitle,
         buttonImage,
+		icon,
     ] = await Promise.all([
-                getString('ketcherButtonNameTitle', component),
-                getString('ketcherButtonNameTitle', component),
+                getString('buttonNameTitle', component),
                 getButtonImage('icon', component),
             ]);
 
