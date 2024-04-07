@@ -21,12 +21,18 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {buttonName} from './common';
+import {
+    buttonName
+}
+from './common';
 import uploadFile from 'editor_tiny/uploader';
-import {addContextmenuItem,} from 'editor_tiny/utils';
+import {
+    addContextmenuItem,
+}
+from 'editor_tiny/utils';
 
 const configureMenu = (menu) => {
-        menu.insert.items = `${buttonName} ${menu.insert.items}`;
+    menu.insert.items = `${buttonName} ${menu.insert.items}`;
     return menu;
 };
 
@@ -55,8 +61,7 @@ export const configure = (instanceConfig) => {
             'image',
             blobInfo.blob(),
             blobInfo.filename(),
-            progress
-        ),
+            progress),
         // eslint-disable-next-line camelcase
         images_reuse_filename: true,
     };

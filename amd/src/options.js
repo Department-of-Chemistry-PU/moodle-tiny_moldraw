@@ -21,8 +21,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getPluginOptionName} from 'editor_tiny/options';
-import {pluginName} from './common';
+import {
+    getPluginOptionName
+}
+from 'editor_tiny/options';
+import {
+    pluginName
+}
+from './common';
 
 // Helper variables for the option names.
 const showPlugin = getPluginOptionName(pluginName, 'showplugin');
@@ -48,4 +54,3 @@ export const register = (editor) => {
  * @returns {object} The value of the myFirstProperty option
  */
 export const isPluginVisible = (editor) => editor.options.get(showPlugin);
-

@@ -21,12 +21,28 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getTinyMCE} from 'editor_tiny/loader';
-import {getPluginMetadata} from 'editor_tiny/utils';
+import {
+    getTinyMCE
+}
+from 'editor_tiny/loader';
+import {
+    getPluginMetadata
+}
+from 'editor_tiny/utils';
 
-import {component, pluginName,} from './common';
-import {register as registerOptions} from './options';
-import {getSetup as getCommandSetup} from './commands';
+import {
+    component,
+    pluginName,
+}
+from './common';
+import {
+    register as registerOptions
+}
+from './options';
+import {
+    getSetup as getCommandSetup
+}
+from './commands';
 import * as Configuration from './configuration';
 
 // Setup the tiny_ketcher Plugin.
