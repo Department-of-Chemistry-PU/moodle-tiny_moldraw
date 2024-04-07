@@ -1,0 +1,73 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tiny_keteditor/ketcher_iframe
+
+    Insert ketcher window for chemical structure drawing.
+
+    Example context (json):
+    {
+
+    }
+}}
+<div class="center">
+    <div id="root"></div>
+    <button class="btn btn-primary" id="actionButton">Save</button>
+</div>
+<script>
+
+
+document.getElementById('actionButton').addEventListener('click', function() {
+(async function() {
+var ketcher = window.ketcher;
+    var struct = await ketcher.getKet();
+    var image = await ketcher.generateImage(struct, {
+        outputFormat: "svg",
+        backgroundColor: "255, 255, 255"
+    });
+    // Create a new FileReader instance
+    var reader = new FileReader();
+    // Add an event listener for the 'load' event
+    reader.addEventListener('load', function() {
+        // The result attribute contains the data as a Base64 encoded string
+        var base64Image = reader.result;
+
+        // Parse the SVG to get the width and height
+        var parser = new DOMParser();
+        var svgDoc = parser.parseFromString(atob(base64Image.split(',')[1]), "image/svg+xml");
+        var svgElement = svgDoc.documentElement;
+        var width = svgElement.getAttribute("width");
+        var height = svgElement.getAttribute("height");
+        if (window.parent.tinyMCE && window.parent.tinyMCE.activeEditor) {
+            var url = URL.createObjectURL(image);
+            var ketString = JSON.stringify(struct);
+            var ketStruct = ketString.replace(/\\n/g, '').replace(/\\"/g, '"').replace(/ /g, '').slice(1, -1);
+            var content = '<img src="' + url + '" width="' + width + '" height="' + height + '">';			
+            window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, content);
+            window.parent.tinyMCE.activeEditor.execCommand('mceInsertContent', 0, '<!--' + ketStruct + '-->');
+        } else {
+            console.log('TinyMCE not initialized');
+        }
+        $(window.parent.document).find(".modal").find('.close').click();
+    });
+
+    // Start reading the Blob as a Base64 encoded string
+    reader.readAsDataURL(image);
+	})();
+});
+</script>
+

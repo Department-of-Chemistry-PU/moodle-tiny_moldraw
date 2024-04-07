@@ -14,67 +14,119 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Commands helper for the Moodle tiny_moldraw plugin.
+ * Common values helper for the Moodle tiny_keteditor plugin.
  *
- * @module      plugintype_pluginname/commands
+ * @module      tiny_keteditor/commands
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getButtonImage} from 'editor_tiny/utils';
-import {get_string as getString} from 'core/str';
+import {
+    getButtonImage
+}
+from 'editor_tiny/utils';
+import {
+    get_string as getString
+}
+from 'core/str';
 import {
     component,
-    startMolDrawButtonName,
-    startMolDrawMenuItemName,
     icon,
-} from './common';
+    buttonName
+}
+from './common';
+import {
+    KetcherEmbed
+}
+from './embed';
 
+const isImage = (node) => node.nodeName.toLowerCase() === 'img';
 /**
  * Handle the action for your plugin.
  * @param {TinyMCE.editor} editor The tinyMCE editor instance.
  */
-const handleAction = (editor) => {
-    // TODO Handle the action.
-    window.console.log(editor);
+
+const handleAction = async(editor) => {
+    const ketcherImage = new KetcherEmbed(editor);
+    ketcherImage.init();
+    try {
+        const ketcher = await ketcherImage.waitForKetcher();
+        if (window.json) {
+            window.console.log("molecule loading...", window.json);
+            ketcher.setMolecule(window.json);
+        } else {
+            window.console.log("Ketcher Molecular Data Not Available");
+        }
+    } catch (error) {
+        window.console.error(error.message);
+    }
 };
 
-/**
- * Get the setup function for the buttons.
- *
- * This is performed in an async function which ultimately returns the registration function as the
- * Tiny.AddOnManager.Add() function does not support async functions.
- *
- * @returns {function} The registration function to call within the Plugin.add function.
- */
 export const getSetup = async() => {
+    //    const isImage = (node) => node.nodeName.toLowerCase() === 'img';
+
     const [
-        startMolDrawButtonNameTitle,
-        startMolDrawMenuItemNameTitle,
+        buttonNameTitle,
         buttonImage,
     ] = await Promise.all([
-        getString('button_startMolDraw', component),
-        getString('menuitem_startMolDraw', component),
-        getButtonImage('icon', component),
-    ]);
+                getString('buttonNameTitle', component),
+                getButtonImage('icon', component),
+            ]);
 
     return (editor) => {
         // Register the Moodle SVG as an icon suitable for use as a TinyMCE toolbar button.
         editor.ui.registry.addIcon(icon, buttonImage.html);
 
-        // Register the startMolDraw Toolbar Button.
-        editor.ui.registry.addButton(startMolDrawButtonName, {
+        // Register the startdemo Toolbar Button.
+        editor.ui.registry.addButton(buttonName, {
             icon,
-            tooltip: startMolDrawButtonNameTitle,
+            tooltip: buttonNameTitle,
             onAction: () => handleAction(editor),
         });
 
-        // Add the startMolDraw Menu Item.
-        // This allows it to be added to a standard menu, or a context menu.
-        editor.ui.registry.addMenuItem(startMolDrawMenuItemName, {
+        editor.ui.registry.addToggleButton(buttonName, {
             icon,
-            text: startMolDrawMenuItemNameTitle,
+            tooltip: buttonNameTitle,
+            onAction: () => handleAction(editor, window.json),
+            onSetup: api => {
+                return editor.selection.selectorChangedWithUnbind(
+                    'img:not([data-mce-object]):not([data-mce-placeholder]),figure.image',
+                    function () {
+                    var node = editor.selection.getNode();
+                    var parentNode = node.parentNode;
+                    const html = editor.serializer.serialize(parentNode);
+                    const commentMatch = html.match(/<!--(.*?)-->/);
+                    if (commentMatch) {
+                        try {
+                            var json = JSON.parse(commentMatch[1]);
+                            // If the comment contains valid JSON, call api.setActive and store the JSON
+                            api.setActive(true);
+                            window.json = JSON.stringify(json); // Save the JSON to window.json
+                        } catch (e) {
+                            // If the comment does not contain valid JSON, call api.setActive with false
+                            api.setActive(false);
+                        }
+                    } else {
+                        api.setActive(false);
+                    }
+                }).unbind;
+            }
+        });
+
+        editor.ui.registry.addContextToolbar(buttonName, {
+            predicate: isImage,
+            items: buttonName,
+            position: 'node',
+            scope: 'node'
+        });
+
+        // Add the startdemo Menu Item.
+        // This allows it to be added to a standard menu, or a context menu.
+        editor.ui.registry.addMenuItem(buttonName, {
+            icon,
+            text: buttonNameTitle,
             onAction: () => handleAction(editor),
         });
+
     };
 };

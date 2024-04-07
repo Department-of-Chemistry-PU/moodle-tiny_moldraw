@@ -14,44 +14,55 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Tiny tiny_moldraw for Moodle.
+ * Tiny tiny_keteditor for Moodle.
  *
- * @module      plugintype_pluginname/plugin
+ * @module      tiny_keteditor/configurastion
  * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 import {
-    startMolDrawButtonName,
-    startMolDrawMenuItemName,
-} from './common';
-
+    buttonName
+}
+from './common';
+import uploadFile from 'editor_tiny/uploader';
 import {
-    addMenubarItem,
-    addToolbarButtons,
-} from 'editor_tiny/utils';
+    addContextmenuItem,
+}
+from 'editor_tiny/utils';
 
-const getToolbarConfiguration = (instanceConfig) => {
-    let toolbar = instanceConfig.toolbar;
-    toolbar = addToolbarButtons(toolbar, 'content', [
-        startMolDrawButtonName,
-    ]);
-
-    return toolbar;
-};
-
-const getMenuConfiguration = (instanceConfig) => {
-    let menu = instanceConfig.menu;
-    menu = addMenubarItem(menu, 'file', [
-        startMolDrawMenuItemName,
-    ].join(' '));
-
+const configureMenu = (menu) => {
+    menu.insert.items = `${buttonName} ${menu.insert.items}`;
     return menu;
 };
 
+const configureToolbar = (toolbar) => {
+    // The toolbar contains an array of named sections.
+    // The Moodle integration ensures that there is a section called 'content'.
+    return toolbar.map((section) => {
+        if (section.name === 'content') {
+            // Insert the image, and embed, buttons at the start of it.
+            section.items.unshift(buttonName);
+        }
+        return section;
+    });
+};
+
 export const configure = (instanceConfig) => {
+    // Update the instance configuration to add the Media menu option to the menus and toolbars and upload_handler.
     return {
-        toolbar: getToolbarConfiguration(instanceConfig),
-        menu: getMenuConfiguration(instanceConfig),
+        contextmenu: addContextmenuItem(instanceConfig.contextmenu, buttonName),
+        menu: configureMenu(instanceConfig.menu),
+        toolbar: configureToolbar(instanceConfig.toolbar),
+
+        // eslint-disable-next-line camelcase
+        images_upload_handler: (blobInfo, progress) => uploadFile(
+            window.tinymce.activeEditor,
+            'image',
+            blobInfo.blob(),
+            blobInfo.filename(),
+            progress),
+        // eslint-disable-next-line camelcase
+        images_reuse_filename: true,
     };
 };

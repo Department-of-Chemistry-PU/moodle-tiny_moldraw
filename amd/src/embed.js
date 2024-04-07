@@ -1,4 +1,4 @@
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -11,61 +11,69 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Tiny Sketch plugin Embed class for Moodle.
+ * Common values helper for the Moodle tiny_keteditor plugin.
  *
- * @module      tiny_moldraw/embed
- * @copyright   2024 Venkatesan Rangarajan <venkatesanr.che@pondiuni.edu.in>
+ * @module      tiny_keteditor/embed
+ * @copyright   2024 Venkatesan Rangarajan <venkatesanrpu@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {get_string as getString} from 'core/str';
-import * as ModalEvents from 'core/modal_events';
+import {
+    get_string as getString
+}
+from 'core/str';
 import Templates from 'core/templates';
 import Modal from 'core/modal';
 import Config from 'core/config';
-import component from './common';
+import {
+    exception as displayException
+}
+from 'core/notification';
 
-export const SketchEmbed = class {
+export const KetcherEmbed = class {
     editor = null;
-    canShowFilePicker = false;
-
-    /**
-     * @property {Object} The names of the alignment options.
-     */
-    helpStrings = null;
-
-    /**
-     * @property {boolean} Indicate that the user is updating the media or not.
-     */
-    isUpdating = false;
-
     constructor(editor) {
         this.editor = editor;
     }
-
-    async displayDialogue() {
-        Modal.create({
-            title: getString('sketchtitle', 'component'),
-            body: Templates.render('tiny_moldraw/sketch_iframe', {
-                src: this.getIframeURL()
-            })
-        }).then(modal => {
-            modal.getRoot().on(ModalEvents.hidden, () => {
-                modal.destroy();
-            });
-            modal.show();
-            document.querySelector('.modal-dialog').style.cssText = "max-width: unset;width:100%;height:100vh;margin:0;padding:0;";
-            document.querySelector('.modal-content').style.cssText = "max-height: unset;height:100vh;";
-            document.querySelector('.modal-body').style.cssText = "padding:0";
-            return modal;
-        }).catch();
-    }
-
-    getIframeURL = () => {
-        const url = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/moldraw/ketcher/sketch.html`);
-        return url.toString();
+    init = async() => {
+        const modal = await Modal.create({
+            title: getString('buttonNameTitle', 'tiny_keteditor'),
+            show: true,
+            removeOnClose: true,
+        });
+        Templates.renderForPromise('tiny_keteditor/ketcher_template', {})
+        .then(async({
+                html,
+                js
+            }) => {
+            Templates.appendNodeContents(modal.getBody(), html, js);
+            const scripturl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/keteditor/ketcher/static/js/main.963f80c2.js`);
+            var script = document.createElement('script');
+            script.src = scripturl.toString();
+            document.body.appendChild(script); // Append the script to the body
+            const cssurl = new URL(`${Config.wwwroot}/lib/editor/tiny/plugins/keteditor/ketcher/static/css/main.3fc9c0f8.css`);
+            var link = document.createElement('link');
+            link.href = cssurl.toString();
+            link.rel = 'stylesheet';
+            document.head.appendChild(link); // Append the link to the head
+        })
+        .catch((error) => displayException(error));
+    };
+    waitForKetcher = () => {
+        return new Promise((resolve, reject) => {
+            const checkKetcher = setInterval(() => {
+                if (window.ketcher) {
+                    clearInterval(checkKetcher);
+                    resolve(window.ketcher);
+                }
+            }, 100);
+            setTimeout(() => {
+                clearInterval(checkKetcher);
+                reject(new Error('Ketcher loading timeout'));
+            }, 5000); // Timeout after 5 seconds
+        });
     };
 };
