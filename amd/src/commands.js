@@ -36,7 +36,8 @@ import {
 }
 from './common';
 import {
-    KetcherEmbed
+    ketcherEmbed,
+    saveData
 }
 from './embed';
 
@@ -47,7 +48,7 @@ const isImage = (node) => node.nodeName.toLowerCase() === 'img';
  */
 
 const handleAction = async(editor) => {
-    const ketcherImage = new KetcherEmbed(editor);
+    const ketcherImage = new ketcherEmbed(editor);
     ketcherImage.init();
     try {
         const ketcher = await ketcherImage.waitForKetcher();
@@ -60,6 +61,7 @@ const handleAction = async(editor) => {
     } catch (error) {
         window.console.error(error.message);
     }
+    document.getElementById('actionButton').addEventListener('click', saveData);
 };
 
 export const getSetup = async() => {
