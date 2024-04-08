@@ -59,6 +59,7 @@ export const ketcherEmbed = class {
             link.href = cssurl.toString();
             link.rel = 'stylesheet';
             document.head.appendChild(link); // Append the link to the head
+            window.parent.document.querySelector(".modal-dialog").style.maxWidth = '850px'; // add this line to fix the model width.
         })
         .catch((error) => displayException(error));
     };
