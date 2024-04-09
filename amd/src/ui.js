@@ -1,5 +1,5 @@
 import Modal from "core/modal";
-// import Templates from "core/templates";
+import Templates from "core/templates";
 
 class MyModal extends Modal {
   static TYPE = "tiny_moldraw/moldraw";
@@ -28,7 +28,7 @@ async function loadResource(url, type) {
       script.onload = resolve;
       script.onerror = reject;
       script.src = url;
-      document.getElementsByTagName("head")[0].appendChild(script);
+      document.getElementsByTagName("body")[0].appendChild(script);
     } else if (type === "stylesheet") {
       var link = document.createElement("link");
       link.rel = "stylesheet";
@@ -43,9 +43,9 @@ async function loadResource(url, type) {
   });
 }
 
-// /**
-//  *
-//  */
+/**
+ *
+ */
 async function loadAndRunAnotherFunction() {
   try {
     await loadResource("../../ChemDoodle/install/ChemDoodleWeb.css", "stylesheet");
@@ -72,26 +72,25 @@ async function loadAndRunAnotherFunction() {
     sketcher.repaint();
 
     // Preview ketcher.
-    const sketcher_viewer = new ChemDoodle.ViewerCanvas(
+    const sketcherViewer = new ChemDoodle.ViewerCanvas(
       "sketcher-viewer-atto",
       100,
       100
     );
-    sketcher_viewer.styles.atoms_displayTerminalCarbonLabels_2D = true;
-    sketcher_viewer.styles.atoms_useJMOLColors = true;
-    sketcher_viewer.styles.bonds_clearOverlaps_2D = true;
-    //sketcher_viewer.repaint();
-    sketcher_viewer.emptyMessage = "No data loaded";
+    sketcherViewer.styles.atoms_displayTerminalCarbonLabels_2D = true;
+    sketcherViewer.styles.atoms_useJMOLColors = true;
+    sketcherViewer.styles.bonds_clearOverlaps_2D = true;
+
+    sketcherViewer.emptyMessage = "No data loaded";
     sketcher.oldFunc = sketcher.checksOnAction;
 
     /*   Refactor the function, in order for the preview ketcher to be a copy of the main ketcher,
          updated at every modification of the main ketcher. */
     sketcher.checksOnAction = function (force) {
       this.oldFunc(force);
-      //sketcher.repaint();
       let mols = sketcher.molecules;
       let forms = sketcher.shapes;
-      sketcher_viewer.loadContent(mols, forms);
+      sketcherViewer.loadContent(mols, forms);
       sketcher.center();
       for (let i = 0, ii = this.molecules.length; i < ii; i++) {
         this.molecules[i].check();
@@ -105,7 +104,7 @@ async function loadAndRunAnotherFunction() {
   }
 }
 // Call the function to load all resources and run the provided script
-loadAndRunAnotherFunction();
+
 
 
 function function_resize() {
@@ -124,13 +123,13 @@ function function_resize() {
   } else {
     height = 100;
   }
-  sketcher_viewer.resize(width, height);
+  sketcherViewer.resize(width, height);
 }
 
 function insert() {
   if (window.parent.tinyMCE && window.parent.tinyMCE.activeEditor) {
-    let mol = sketcher_viewer.getMolecule();
-    let src = ChemDoodle.io.png.string(sketcher_viewer);
+    let mol = sketcherViewer.getMolecule();
+    let src = ChemDoodle.io.png.string(sketcherViewer);
     let molFile = ChemDoodle.writeMOL(mol);
     let width = document.getElementById('width_input_molstructure').valueAsNumber;
     let height = document.getElementById('height_input_molstructure').valueAsNumber;
